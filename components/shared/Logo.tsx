@@ -20,7 +20,7 @@ const Logo: React.FC<LogoProps> = ({ size = 'medium', showText = true }) => {
             </div>
             {showText && (
                 <h1 className={`${sizeMap[size].text} font-black text-brand-purple dark:text-white tracking-tighter`}>
-                    THE HUB
+                    LE HUB
                 </h1>
             )}
         </div>

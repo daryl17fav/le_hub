@@ -3,15 +3,15 @@
 import React from 'react';
 import { Backpack, BookOpen, Star, TrendingUp } from 'lucide-react';
 import Button from '@/components/shared/Button';
-import Logo from '@/components/shared/Logo';
 import BottomNav from '@/components/layout/BottomNav';
+import Image from 'next/image';
 import TopNav from '@/components/layout/TopNav';
 
 export default function JuniorDashboard() {
     const lessons = [
-        { id: 1, title: 'Fun with Numbers', progress: 80, icon: '🔢' },
-        { id: 2, title: 'Reading Adventures', progress: 60, icon: '📚' },
-        { id: 3, title: 'Science Explorers', progress: 40, icon: '🔬' },
+        { id: 1, title: 'S\'amuser avec les Chiffres', progress: 80, icon: '🔢' },
+        { id: 2, title: 'Aventures de Lecture', progress: 60, icon: '📚' },
+        { id: 3, title: 'Explorateurs Scientifiques', progress: 40, icon: '🔬' },
     ];
 
     return (
@@ -21,10 +21,11 @@ export default function JuniorDashboard() {
             <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 pb-24 md:pb-6 relative overflow-hidden">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0 opacity-10 dark:opacity-5">
-                    <img
+                    <Image
                         src="/images/junior-bg.jpg"
                         alt="Background Pattern"
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                     />
                 </div>
 
@@ -37,10 +38,10 @@ export default function JuniorDashboard() {
                             </div>
                             <div>
                                 <h1 className="text-4xl font-black text-brand-purple dark:text-white">
-                                    Junior School
+                                    École Junior
                                 </h1>
                                 <p className="text-lg text-zinc-600 dark:text-zinc-400">
-                                    Let's learn and have fun! 🎉
+                                    Apprenons et amusons-nous ! 🎉
                                 </p>
                             </div>
                         </div>
@@ -51,17 +52,17 @@ export default function JuniorDashboard() {
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
                             <Star size={32} className="text-brand-orange mb-2" />
                             <p className="text-3xl font-black text-brand-purple">245</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Stars Earned</p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Étoiles Gagnées</p>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
                             <BookOpen size={32} className="text-brand-purple mb-2" />
                             <p className="text-3xl font-black text-brand-purple">12</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Lessons Done</p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Leçons Terminées</p>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
                             <TrendingUp size={32} className="text-brand-orange mb-2" />
                             <p className="text-3xl font-black text-brand-purple">5</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Day Streak</p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Série (Jours)</p>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
                             <span className="text-4xl mb-2">🏆</span>
@@ -72,7 +73,7 @@ export default function JuniorDashboard() {
 
                     {/* Lessons */}
                     <h2 className="text-2xl font-black text-brand-purple dark:text-white mb-4">
-                        Your Lessons
+                        Vos Leçons
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {lessons.map((lesson) => (
@@ -93,7 +94,7 @@ export default function JuniorDashboard() {
                                         />
                                     </div>
                                     <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">
-                                        {lesson.progress}% Complete
+                                        {lesson.progress}% Terminé
                                     </p>
                                 </div>
                                 <Button
@@ -105,7 +106,7 @@ export default function JuniorDashboard() {
                                         window.location.href = '/lesson';
                                     }}
                                 >
-                                    Continue
+                                    Continuer
                                 </Button>
                             </div>
                         ))}

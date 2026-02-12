@@ -24,11 +24,11 @@ const Stage5: React.FC<Stage5Props> = ({ onComplete, score = 100 }) => {
                 </div>
 
                 <h1 className="text-5xl font-black text-center text-brand-purple dark:text-white mb-4">
-                    🎉 Lesson Complete!
+                    🎉 Leçon Terminée !
                 </h1>
 
                 <p className="text-2xl text-center text-zinc-600 dark:text-zinc-400 mb-8">
-                    Amazing work! You've mastered this lesson.
+                    Travail incroyable ! Vous avez maîtrisé cette leçon.
                 </p>
 
                 {/* Score Display */}
@@ -39,7 +39,7 @@ const Stage5: React.FC<Stage5Props> = ({ onComplete, score = 100 }) => {
                         <Star size={32} className="text-brand-orange fill-brand-orange" />
                     </div>
                     <p className="text-center text-lg font-bold text-zinc-700 dark:text-zinc-300">
-                        Your Score
+                        Votre Score
                     </p>
                 </div>
 
@@ -47,20 +47,20 @@ const Stage5: React.FC<Stage5Props> = ({ onComplete, score = 100 }) => {
                 <div className="grid grid-cols-3 gap-4 mb-8">
                     <div className="flex flex-col items-center p-4 bg-zinc-100 dark:bg-zinc-800 rounded-xl">
                         <span className="text-3xl mb-2">🏆</span>
-                        <span className="text-xs font-bold text-center">First Try</span>
+                        <span className="text-xs font-bold text-center">Premier Essai</span>
                     </div>
                     <div className="flex flex-col items-center p-4 bg-zinc-100 dark:bg-zinc-800 rounded-xl">
                         <span className="text-3xl mb-2">⚡</span>
-                        <span className="text-xs font-bold text-center">Speed Bonus</span>
+                        <span className="text-xs font-bold text-center">Bonus de Vitesse</span>
                     </div>
                     <div className="flex flex-col items-center p-4 bg-zinc-100 dark:bg-zinc-800 rounded-xl">
                         <span className="text-3xl mb-2">🎯</span>
-                        <span className="text-xs font-bold text-center">Perfect Score</span>
+                        <span className="text-xs font-bold text-center">Score Parfait</span>
                     </div>
                 </div>
 
                 <Button variant="primary" size="large" onClick={onComplete} className="w-full">
-                    Continue Learning →
+                    Continuer l'Apprentissage →
                 </Button>
             </div>
         </div>

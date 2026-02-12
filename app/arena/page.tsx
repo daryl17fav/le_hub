@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Trophy, Medal } from 'lucide-react';
+import { Medal } from 'lucide-react';
 import BottomNav from '@/components/layout/BottomNav';
 import TopNav from '@/components/layout/TopNav';
 import VillageMap from '@/components/shared/VillageMap';
@@ -30,10 +30,10 @@ export default function ArenaPage() {
                     {/* Header */}
                     <div className="text-center mb-8">
                         <h1 className="text-5xl md:text-6xl font-black text-brand-purple dark:text-white mb-2">
-                            Village Competitions
+                            Compétitions de Village
                         </h1>
                         <p className="text-xl text-zinc-600 dark:text-zinc-400">
-                            Compete & Learn Together
+                            Compétition et Apprentissage Ensemble
                         </p>
                     </div>
 
@@ -47,11 +47,11 @@ export default function ArenaPage() {
                             <div className="mt-6 bg-gradient-to-br from-brand-purple to-brand-orange rounded-3xl p-6 shadow-2xl">
                                 <div className="flex items-center justify-between text-white">
                                     <div>
-                                        <p className="text-sm font-bold opacity-90">Your Rank</p>
+                                        <p className="text-sm font-bold opacity-90">Votre Rang</p>
                                         <p className="text-5xl font-black">#12</p>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-sm font-bold opacity-90">Your Points</p>
+                                        <p className="text-sm font-bold opacity-90">Vos Points</p>
                                         <p className="text-5xl font-black">1,850</p>
                                     </div>
                                     <div className="text-6xl opacity-50">⚡</div>
@@ -64,7 +64,7 @@ export default function ArenaPage() {
                             <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-2xl sticky top-24">
                                 <h2 className="text-2xl font-black text-brand-purple dark:text-white mb-6 flex items-center gap-2">
                                     <Medal size={28} className="text-brand-orange" />
-                                    Top 10 Learners
+                                    Top 10 des Apprenants
                                 </h2>
 
                                 <div className="space-y-3 max-h-[600px] overflow-y-auto">
@@ -72,8 +72,8 @@ export default function ArenaPage() {
                                         <div
                                             key={user.rank}
                                             className={`flex items-center gap-3 p-3 rounded-2xl transition-all ${user.rank <= 3
-                                                    ? 'bg-gradient-to-r from-brand-purple/10 to-brand-orange/10 border-2 border-brand-purple'
-                                                    : 'bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+                                                ? 'bg-gradient-to-r from-brand-purple/10 to-brand-orange/10 border-2 border-brand-purple'
+                                                : 'bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700'
                                                 }`}
                                         >
                                             {/* Rank */}
@@ -115,29 +115,29 @@ export default function ArenaPage() {
                     <div className="mt-8 grid md:grid-cols-2 gap-6">
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
                             <h3 className="text-xl font-black text-brand-purple dark:text-white mb-4">
-                                🔥 Weekly Challenge
+                                🔥 Défis Hebdomadaires
                             </h3>
                             <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                                Complete 5 lessons this week to earn bonus points!
+                                Complétez 5 leçons cette semaine pour gagner des points bonus !
                             </p>
                             <div className="bg-zinc-100 dark:bg-zinc-800 rounded-full h-3 overflow-hidden">
                                 <div className="bg-brand-orange h-full" style={{ width: '60%' }} />
                             </div>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">3/5 Lessons</p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">3/5 Leçons</p>
                         </div>
 
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
                             <h3 className="text-xl font-black text-brand-purple dark:text-white mb-4">
-                                ⚡ Speed Round
+                                ⚡ Tour Rapide
                             </h3>
                             <p className="text-zinc-600 dark:text-zinc-400 mb-4">
-                                Answer 10 questions in under 2 minutes!
+                                Répondez à 10 questions en moins de 2 minutes !
                             </p>
                             <button
                                 className="w-full bg-brand-orange text-white font-bold py-4 rounded-xl hover:bg-brand-orange/90 transition-colors shadow-lg shadow-brand-orange/30"
                                 onClick={() => window.location.href = '/lesson'}
                             >
-                                Start Challenge
+                                Commencer le Défi
                             </button>
                         </div>
                     </div>

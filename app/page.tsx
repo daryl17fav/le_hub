@@ -23,17 +23,17 @@ export default function LandingPage() {
         <div className="text-center mb-16">
           {/* Main Headline */}
           <h1 className="text-5xl md:text-7xl font-black text-brand-purple dark:text-white mb-6 leading-tight">
-            Learn Together,
+            Apprendre Ensemble,
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-purple to-brand-orange">
-              Grow Together
+              Grandir Ensemble
             </span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 mb-8 max-w-3xl mx-auto">
-            The Hub brings quality education to rural communities through mobile-first,
-            low-data learning. Compete with your village, earn rewards, and build skills for life.
+            Le Hub apporte une éducation de qualité aux communautés rurales grâce à l'apprentissage mobile
+            à faible consommation de données. Affrontez votre village, gagnez des récompenses et développez des compétences pour la vie.
           </p>
 
           {/* CTA Button */}
@@ -41,12 +41,12 @@ export default function LandingPage() {
             className="group bg-brand-orange hover:bg-brand-orange/90 text-white font-black text-xl px-12 py-6 rounded-2xl shadow-2xl shadow-brand-orange/30 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-3 mx-auto"
             onClick={() => window.location.href = '/auth'}
           >
-            Get Started Free
+            Commencer Gratuitement
             <ArrowRight size={28} className="group-hover:translate-x-1 transition-transform" />
           </button>
 
           <p className="text-sm text-zinc-500 dark:text-zinc-500 mt-4">
-            No credit card required • Works on any phone
+            Pas de carte de crédit requise • Fonctionne sur n'importe quel téléphone
           </p>
         </div>
 
@@ -58,10 +58,10 @@ export default function LandingPage() {
               <GraduationCap size={32} className="text-white" />
             </div>
             <h3 className="text-xl font-black text-brand-purple dark:text-white mb-2">
-              Quality Lessons
+              Leçons de Qualité
             </h3>
             <p className="text-zinc-600 dark:text-zinc-400">
-              Interactive lessons designed for all ages, from kids to adults.
+              Des leçons interactives conçues pour tous les âges, des enfants aux adultes.
             </p>
           </div>
 
@@ -71,10 +71,10 @@ export default function LandingPage() {
               <Sparkles size={32} className="text-white" />
             </div>
             <h3 className="text-xl font-black text-brand-purple dark:text-white mb-2">
-              Low Data Usage
+              Faible Consommation de Données
             </h3>
             <p className="text-zinc-600 dark:text-zinc-400">
-              Optimized for slow connections and limited data plans.
+              Optimisé pour les connexions lentes et les forfaits de données limités.
             </p>
           </div>
 
@@ -84,10 +84,10 @@ export default function LandingPage() {
               <Users size={32} className="text-white" />
             </div>
             <h3 className="text-xl font-black text-brand-purple dark:text-white mb-2">
-              Village Competition
+              Compétition de Village
             </h3>
             <p className="text-zinc-600 dark:text-zinc-400">
-              Compete with other villages and climb the leaderboard together.
+              Affrontez d'autres villages et grimpez ensemble dans le classement.
             </p>
           </div>
 
@@ -97,10 +97,10 @@ export default function LandingPage() {
               <Trophy size={32} className="text-white" />
             </div>
             <h3 className="text-xl font-black text-brand-purple dark:text-white mb-2">
-              Earn Rewards
+              Gagner des Récompenses
             </h3>
             <p className="text-zinc-600 dark:text-zinc-400">
-              Collect badges, stars, and certificates as you learn.
+              Collectez des badges, des étoiles et des certificats au fur et à mesure que vous apprenez.
             </p>
           </div>
         </div>
@@ -108,10 +108,10 @@ export default function LandingPage() {
         {/* Social Proof */}
         <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-xl text-center">
           <p className="text-4xl md:text-5xl font-black text-brand-purple dark:text-white mb-4">
-            10,000+ Learners
+            10 000+ Apprenants
           </p>
           <p className="text-xl text-zinc-600 dark:text-zinc-400 mb-6">
-            Across 50+ villages in Nigeria
+            Dans plus de 50 villages au Bénin
           </p>
           <div className="flex justify-center gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -123,7 +123,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="text-center py-8 text-zinc-500 dark:text-zinc-600">
-        <p>© 2026 The Hub. Empowering rural communities through education.</p>
+        <p>© 2026 Le Hub. Autonomiser les communautés rurales par l'éducation.</p>
       </footer>
     </div>
   );

@@ -9,8 +9,12 @@ export default function ThemeSwitcher() {
     const [mounted, setMounted] = useState(false)
 
     // This prevents "hydration error" (making sure we are on the client side)
-    useEffect(() => setMounted(true), [])
-    if (!mounted) return null
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
 
     return (
         <button

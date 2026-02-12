@@ -23,21 +23,21 @@ const Stage1: React.FC<Stage1Props> = ({ onNext }) => {
                 </div>
 
                 <h1 className="text-4xl font-black text-center text-brand-purple dark:text-white mb-4">
-                    Welcome to Your Lesson!
+                    Bienvenue dans votre Leçon !
                 </h1>
 
                 <p className="text-xl text-center text-zinc-600 dark:text-zinc-400 mb-8">
-                    Get ready to learn something amazing. This lesson will help you grow your skills step by step.
+                    Préparez-vous à apprendre quelque chose d'incroyable. Cette leçon vous aidera à développer vos compétences étape par étape.
                 </p>
 
                 {/* Audio Player Placeholder */}
                 <div className="bg-zinc-100 dark:bg-zinc-800 rounded-2xl p-6 mb-8 flex items-center justify-center gap-4">
                     <Play size={32} className="text-brand-purple" />
-                    <span className="font-bold text-lg">Listen to Introduction</span>
+                    <span className="font-bold text-lg">Écouter l'Introduction</span>
                 </div>
 
                 <Button variant="primary" size="large" onClick={onNext} className="w-full">
-                    Let's Begin! 🚀
+                    Commençons ! 🚀
                 </Button>
             </div>
         </div>

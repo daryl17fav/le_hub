@@ -4,26 +4,29 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Backpack, Smartphone } from 'lucide-react';
 import Logo from '@/components/shared/Logo';
 import AddProfile from '@/components/shared/AddProfile';
-import { UserProfile, AVATAR_COLORS, getProfiles, createProfile } from '@/lib/config';
+import { useAuth, UserProfile } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+
+const AVATAR_COLORS = [
+    { bg: 'bg-purple-500', border: 'border-purple-600' },
+    { bg: 'bg-orange-500', border: 'border-orange-600' },
+    { bg: 'bg-blue-500', border: 'border-blue-600' },
+    { bg: 'bg-green-500', border: 'border-green-600' },
+    { bg: 'bg-pink-500', border: 'border-pink-600' },
+    { bg: 'bg-yellow-500', border: 'border-yellow-600' },
+];
 
 export default function SelectProfilePage() {
-    const [profiles, setProfiles] = useState<UserProfile[]>([]);
+    const { user, profiles, addProfile, loading } = useAuth();
     const [showAddProfile, setShowAddProfile] = useState(false);
-    const [phoneNumber, setPhoneNumber] = useState('');
+    const router = useRouter();
 
+    // Redirect to auth if not logged in
     useEffect(() => {
-        // Get phone number from session/localStorage
-        const phone = localStorage.getItem('phoneNumber') || '+2348012345678';
-        setPhoneNumber(phone);
-
-        // Load profiles
-        loadProfiles(phone);
-    }, []);
-
-    const loadProfiles = async (phone: string) => {
-        const userProfiles = await getProfiles(phone);
-        setProfiles(userProfiles);
-    };
+        if (!loading && !user) {
+            router.push('/auth');
+        }
+    }, [user, loading, router]);
 
     const handleAddProfile = async (newProfile: {
         name: string;
@@ -31,23 +34,26 @@ export default function SelectProfilePage() {
         village: string;
         avatarIndex: number
     }) => {
-        // Create profile in database
-        const profileId = await createProfile(phoneNumber, newProfile);
+        try {
+            await addProfile({
+                name: newProfile.name,
+                type: newProfile.type,
+                village: newProfile.village,
+                avatar: `avatar-${newProfile.avatarIndex}`
+            });
 
-        // Add to local state
-        const profile: UserProfile = {
-            id: profileId,
-            ...newProfile,
-            points: 0,
-            lessonsCompleted: 0,
-            createdAt: new Date(),
-        };
+            setShowAddProfile(false);
 
-        setProfiles([...profiles, profile]);
-        setShowAddProfile(false);
-
-        // Navigate to appropriate dashboard
-        navigateToProfile(profile);
+            // Navigate to appropriate dashboard
+            if (newProfile.type === 'junior') {
+                router.push('/junior');
+            } else {
+                router.push('/adult');
+            }
+        } catch (error) {
+            console.error('Error adding profile:', error);
+            alert('Échec de l\'ajout du profil. Veuillez réessayer.');
+        }
     };
 
     const navigateToProfile = (profile: UserProfile) => {
@@ -56,22 +62,40 @@ export default function SelectProfilePage() {
 
         // Navigate based on type
         if (profile.type === 'junior') {
-            window.location.href = '/junior';
+            router.push('/junior');
         } else {
-            window.location.href = '/adult';
+            router.push('/adult');
         }
     };
+
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-brand-purple border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-zinc-600 dark:text-zinc-400 font-bold">Chargement...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Don't render if not authenticated
+    if (!user) {
+        return null;
+    }
 
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center p-6 relative overflow-hidden">
             {/* Background Image */}
-            <div className="absolute inset-0 z-0 opacity-10 dark:opacity-5">
-                <img
+            {/* <div className="absolute inset-0 z-0 opacity-10 dark:opacity-5">
+                <Image
                     src="/images/select-profile-bg.jpg"
                     alt="Background Pattern"
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                 />
-            </div>
+            </div> */}
 
             <div className="w-full max-w-4xl relative z-10">
                 {/* Logo */}
@@ -82,18 +106,20 @@ export default function SelectProfilePage() {
                 {/* Header */}
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-5xl font-black text-brand-purple dark:text-white mb-3">
-                        Who is learning today?
+                        {profiles.length === 0 ? 'Bienvenue !' : 'Qui apprend aujourd\'hui ?'}
                     </h1>
                     <p className="text-xl text-zinc-600 dark:text-zinc-400">
-                        Select your profile to continue
+                        {profiles.length === 0
+                            ? 'Créez votre premier profil pour commencer'
+                            : 'Sélectionnez votre profil pour continuer'}
                     </p>
                 </div>
 
                 {/* Profiles Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
                     {/* Existing Profiles */}
-                    {profiles.map((profile) => {
-                        const avatarColor = AVATAR_COLORS[profile.avatarIndex];
+                    {profiles.map((profile: UserProfile) => {
+                        const avatarColor = AVATAR_COLORS[parseInt(profile.id) % AVATAR_COLORS.length];
                         const Icon = profile.type === 'junior' ? Backpack : Smartphone;
 
                         return (
@@ -117,13 +143,15 @@ export default function SelectProfilePage() {
                                     ? 'bg-brand-purple/10 text-brand-purple'
                                     : 'bg-brand-orange/10 text-brand-orange'
                                     }`}>
-                                    {profile.type === 'junior' ? 'Junior' : 'Adult'}
+                                    {profile.type === 'junior' ? 'Junior' : 'Adulte'}
                                 </span>
 
-                                {/* Points */}
-                                <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">
-                                    {profile.points} points
-                                </p>
+                                {/* Village */}
+                                {profile.village && (
+                                    <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">
+                                        {profile.village}
+                                    </p>
+                                )}
                             </button>
                         );
                     })}
@@ -138,25 +166,25 @@ export default function SelectProfilePage() {
                         </div>
 
                         <p className="font-black text-xl text-brand-purple dark:text-white">
-                            Add Member
+                            Ajouter un Membre
                         </p>
                         <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-                            Create new profile
+                            Créer un nouveau profil
                         </p>
                     </button>
                 </div>
 
                 {/* Family Info */}
                 <div className="text-center text-sm text-zinc-500 dark:text-zinc-600">
-                    <p>Family Account: {phoneNumber}</p>
+                    <p>Compte Familial : {user.phoneNumber}</p>
                     <button
                         onClick={() => {
                             localStorage.clear();
-                            window.location.href = '/auth';
+                            router.push('/auth');
                         }}
                         className="text-brand-purple dark:text-brand-orange hover:underline mt-2"
                     >
-                        Switch Phone Number
+                        Changer de Numéro de Téléphone
                     </button>
                 </div>
             </div>
@@ -164,7 +192,6 @@ export default function SelectProfilePage() {
             {/* Add Profile Modal */}
             {showAddProfile && (
                 <AddProfile
-                    phoneNumber={phoneNumber}
                     onComplete={handleAddProfile}
                     onCancel={() => setShowAddProfile(false)}
                 />

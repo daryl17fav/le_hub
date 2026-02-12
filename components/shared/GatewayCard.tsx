@@ -45,7 +45,7 @@ const GatewayCard: React.FC<GatewayCardProps> = ({ title, description, Icon, var
 
             {/* Visual touch target indicator/action reminder */}
             <div className="mt-8 flex items-center justify-center min-h-[60px] min-w-[200px] rounded-full bg-white/20 backdrop-blur-sm border border-white/30 group-hover:bg-white/30 transition-colors">
-                <span className="font-bold text-xl uppercase tracking-widest">Enter</span>
+                <span className="font-bold text-xl uppercase tracking-widest">Entrer</span>
             </div>
         </div>
     );

@@ -24,7 +24,7 @@ const VillageMap: React.FC = () => {
             </svg>
 
             {/* Village Markers */}
-            {villages.map((village, index) => (
+            {villages.map((village) => (
                 <div
                     key={village.name}
                     className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
@@ -54,10 +54,10 @@ const VillageMap: React.FC = () => {
 
             {/* Map Legend */}
             <div className="absolute bottom-4 left-4 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-4 py-3 rounded-xl shadow-lg">
-                <p className="text-xs font-bold text-brand-purple dark:text-white mb-2">Village Standings</p>
+                <p className="text-xs font-bold text-brand-purple dark:text-white mb-2">Classement des Villages</p>
                 <div className="flex items-center gap-2 text-xs">
                     <div className="w-3 h-3 bg-brand-orange rounded-full"></div>
-                    <span className="text-zinc-700 dark:text-zinc-300">Active Villages</span>
+                    <span className="text-zinc-700 dark:text-zinc-300">Villages Actifs</span>
                 </div>
             </div>
         </div>

@@ -6,14 +6,13 @@ import { getVillageList } from '@/lib/villages';
 import { AVATAR_COLORS } from '@/lib/config';
 
 interface AddProfileProps {
-    phoneNumber: string;
     onComplete: (profile: { name: string; type: 'junior' | 'adult'; village: string; avatarIndex: number }) => void;
     onCancel: () => void;
 }
 
 type Step = 'type' | 'name' | 'village' | 'avatar';
 
-const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCancel }) => {
+const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
     const [step, setStep] = useState<Step>('type');
     const [type, setType] = useState<'junior' | 'adult'>('junior');
     const [name, setName] = useState('');
@@ -59,10 +58,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                     <div className="space-y-6">
                         <div className="text-center">
                             <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
-                                Add Family Member
+                                Ajouter un Membre de la Famille
                             </h2>
                             <p className="text-zinc-600 dark:text-zinc-400">
-                                Is this for a kid or an adult?
+                                Est-ce pour un enfant ou un adulte ?
                             </p>
                         </div>
 
@@ -80,7 +79,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                                         Junior
                                     </span>
                                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                                        For Kids
+                                        Pour les Enfants
                                     </span>
                                 </div>
                             </button>
@@ -95,10 +94,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                                         <Smartphone size={40} className="text-white" />
                                     </div>
                                     <span className="font-black text-xl text-brand-purple dark:text-white">
-                                        Adult
+                                        Adulte
                                     </span>
                                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                                        For Adults
+                                        Pour les Adultes
                                     </span>
                                 </div>
                             </button>
@@ -111,22 +110,22 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                     <div className="space-y-6">
                         <div className="text-center">
                             <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
-                                What's their name?
+                                Quel est son nom ?
                             </h2>
                             <p className="text-zinc-600 dark:text-zinc-400">
-                                This helps everyone know whose turn it is
+                                Cela aide tout le monde à savoir à qui c&apos;est le tour
                             </p>
                         </div>
 
                         <div>
                             <label className="text-xs uppercase font-bold text-zinc-400 ml-2 block mb-2">
-                                Full Name
+                                Nom Complet
                             </label>
                             <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800 rounded-2xl px-4 border-2 border-transparent focus-within:border-brand-purple transition-all">
                                 <User size={20} className="text-brand-purple" />
                                 <input
                                     type="text"
-                                    placeholder="e.g. Musa Bello"
+                                    placeholder="ex. Musa Bello"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
@@ -141,14 +140,14 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                                 onClick={() => setStep('type')}
                                 className="flex-1 py-4 rounded-2xl font-bold text-brand-purple dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                             >
-                                Back
+                                Retour
                             </button>
                             <button
                                 onClick={handleNameSubmit}
                                 disabled={!name.trim()}
                                 className="flex-1 bg-brand-orange hover:bg-brand-orange/90 disabled:bg-zinc-300 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl shadow-lg shadow-brand-orange/30 transition-all"
                             >
-                                Next
+                                Suivant
                             </button>
                         </div>
                     </div>
@@ -159,10 +158,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                     <div className="space-y-6">
                         <div className="text-center">
                             <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
-                                Select Village
+                                Sélectionner le Village
                             </h2>
                             <p className="text-zinc-600 dark:text-zinc-400">
-                                Which village do they represent?
+                                Quel village représentent-ils ?
                             </p>
                         </div>
 
@@ -177,9 +176,9 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                                     onChange={(e) => setVillage(e.target.value)}
                                     className="flex-1 p-4 bg-transparent outline-none text-zinc-900 dark:text-white cursor-pointer"
                                 >
-                                    <option value="">Choose village...</option>
+                                    <option value="" className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">Choisissez un village...</option>
                                     {villages.map((v) => (
-                                        <option key={v} value={v} className="text-zinc-900 dark:text-zinc-100">{v}</option>
+                                        <option key={v} value={v} className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">{v}</option>
                                     ))}
                                 </select>
                             </div>
@@ -190,14 +189,14 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                                 onClick={() => setStep('name')}
                                 className="flex-1 py-4 rounded-2xl font-bold text-brand-purple dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                             >
-                                Back
+                                Retour
                             </button>
                             <button
                                 onClick={handleVillageSubmit}
                                 disabled={!village}
                                 className="flex-1 bg-brand-orange hover:bg-brand-orange/90 disabled:bg-zinc-300 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl shadow-lg shadow-brand-orange/30 transition-all"
                             >
-                                Next
+                                Suivant
                             </button>
                         </div>
                     </div>
@@ -208,10 +207,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                     <div className="space-y-6">
                         <div className="text-center">
                             <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
-                                Pick a Color
+                                Choisissez une Couleur
                             </h2>
                             <p className="text-zinc-600 dark:text-zinc-400">
-                                Choose {name}'s favorite color
+                                Choisissez la couleur préférée de {name}
                             </p>
                         </div>
 
@@ -231,13 +230,13 @@ const AddProfile: React.FC<AddProfileProps> = ({ phoneNumber, onComplete, onCanc
                                 onClick={() => setStep('village')}
                                 className="flex-1 py-4 rounded-2xl font-bold text-brand-purple dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                             >
-                                Back
+                                Retour
                             </button>
                             <button
                                 onClick={handleComplete}
                                 className="flex-1 bg-brand-orange hover:bg-brand-orange/90 text-white font-black py-4 rounded-2xl shadow-lg shadow-brand-orange/30 transition-all"
                             >
-                                Create Profile
+                                Créer un Profil
                             </button>
                         </div>
                     </div>

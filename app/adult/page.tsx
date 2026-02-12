@@ -5,12 +5,13 @@ import { Smartphone, Briefcase, TrendingUp, Award } from 'lucide-react';
 import Button from '@/components/shared/Button';
 import BottomNav from '@/components/layout/BottomNav';
 import TopNav from '@/components/layout/TopNav';
+import Image from 'next/image';
 
 export default function AdultDashboard() {
     const courses = [
-        { id: 1, title: 'Digital Literacy', progress: 75, category: 'Technology', icon: '💻' },
-        { id: 2, title: 'Financial Management', progress: 50, category: 'Business', icon: '💰' },
-        { id: 3, title: 'Agriculture Basics', progress: 30, category: 'Skills', icon: '🌾' },
+        { id: 1, title: 'Littératie Numérique', progress: 75, category: 'Technologie', icon: '💻' },
+        { id: 2, title: 'Gestion Financière', progress: 50, category: 'Affaires', icon: '💰' },
+        { id: 3, title: 'Bases de l\'Agriculture', progress: 30, category: 'Compétences', icon: '🌾' },
     ];
 
     return (
@@ -20,10 +21,11 @@ export default function AdultDashboard() {
             <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 pb-24 md:pb-6 relative overflow-hidden">
                 {/* Background Image */}
                 <div className="absolute inset-0 z-0 opacity-10 dark:opacity-5">
-                    <img
+                    <Image
                         src="/images/adult-bg.jpg"
                         alt="Background Pattern"
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                     />
                 </div>
 
@@ -36,10 +38,10 @@ export default function AdultDashboard() {
                             </div>
                             <div>
                                 <h1 className="text-4xl font-black text-brand-purple dark:text-white">
-                                    Adult Skills Hub
+                                    Centre de Compétences pour Adultes
                                 </h1>
                                 <p className="text-lg text-zinc-600 dark:text-zinc-400">
-                                    Professional growth for everyday success
+                                    Développement professionnel pour le succès quotidien
                                 </p>
                             </div>
                         </div>
@@ -50,28 +52,28 @@ export default function AdultDashboard() {
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border-l-4 border-brand-purple">
                             <Briefcase size={32} className="text-brand-purple mb-2" />
                             <p className="text-3xl font-black text-brand-purple">8</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Courses Enrolled</p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Cours Inscrits</p>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border-l-4 border-brand-orange">
                             <TrendingUp size={32} className="text-brand-orange mb-2" />
                             <p className="text-3xl font-black text-brand-purple">65%</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Avg Progress</p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Progrès Moyen</p>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border-l-4 border-brand-purple">
                             <Award size={32} className="text-brand-purple mb-2" />
                             <p className="text-3xl font-black text-brand-purple">5</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Certificates</p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Certificats</p>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border-l-4 border-brand-orange">
                             <span className="text-4xl mb-2">⏱️</span>
                             <p className="text-3xl font-black text-brand-purple">24h</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Learning Time</p>
+                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Temps d'Apprentissage</p>
                         </div>
                     </div>
 
                     {/* Courses */}
                     <h2 className="text-2xl font-black text-brand-purple dark:text-white mb-4">
-                        Your Courses
+                        Vos Cours
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {courses.map((course) => (
@@ -97,7 +99,7 @@ export default function AdultDashboard() {
                                         />
                                     </div>
                                     <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">
-                                        {course.progress}% Complete
+                                        {course.progress}% Terminé
                                     </p>
                                 </div>
                                 <Button
@@ -109,7 +111,7 @@ export default function AdultDashboard() {
                                         window.location.href = '/lesson';
                                     }}
                                 >
-                                    Continue Learning
+                                    Continuer l'Apprentissage
                                 </Button>
                             </div>
                         ))}
