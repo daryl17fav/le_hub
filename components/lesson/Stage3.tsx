@@ -26,14 +26,14 @@ const Stage3: React.FC<Stage3Props> = ({ onNext, onBack }) => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gradient-to-br from-brand-purple/10 to-brand-orange/10">
-            <div className="max-w-2xl w-full bg-white dark:bg-zinc-900 rounded-3xl p-8 shadow-2xl">
+            <div className="max-w-2xl w-full bg-white bg-white rounded-3xl p-8 shadow-2xl">
                 <div className="flex items-center justify-center mb-6">
                     <div className="bg-brand-purple/20 rounded-full p-6">
                         <HelpCircle size={48} className="text-brand-purple" />
                     </div>
                 </div>
 
-                <h2 className="text-3xl font-black text-center text-brand-purple dark:text-white mb-8">
+                <h2 className="text-3xl font-black text-center text-brand-purple text-zinc-900 mb-8">
                     Test Your Knowledge
                 </h2>
 
@@ -49,7 +49,7 @@ const Stage3: React.FC<Stage3Props> = ({ onNext, onBack }) => {
                                 onClick={() => setSelectedAnswer(index)}
                                 className={`w-full p-6 rounded-2xl text-left font-bold text-lg transition-all min-h-[72px] ${selectedAnswer === index
                                         ? 'bg-brand-purple text-white shadow-lg shadow-brand-purple/30'
-                                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-brand-purple/10'
+                                        : 'bg-zinc-100 bg-zinc-100 text-zinc-800 dark:text-zinc-200 hover:bg-brand-purple/10'
                                     }`}
                             >
                                 {option}

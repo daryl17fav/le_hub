@@ -17,7 +17,7 @@ interface Stage4Props {
 const Stage4: React.FC<Stage4Props> = ({ onNext, onRetry, isCorrect = true }) => {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gradient-to-br from-brand-orange/10 to-brand-purple/10">
-            <div className="max-w-2xl w-full bg-white dark:bg-zinc-900 rounded-3xl p-8 shadow-2xl">
+            <div className="max-w-2xl w-full bg-white bg-white rounded-3xl p-8 shadow-2xl">
                 <div className="flex items-center justify-center mb-6">
                     <div className={`rounded-full p-6 ${isCorrect ? 'bg-green-100' : 'bg-red-100'}`}>
                         {isCorrect ? (
@@ -33,8 +33,8 @@ const Stage4: React.FC<Stage4Props> = ({ onNext, onRetry, isCorrect = true }) =>
                     {isCorrect ? '🎉 Correct!' : '❌ Not Quite'}
                 </h2>
 
-                <div className="bg-zinc-100 dark:bg-zinc-800 rounded-2xl p-6 mb-8">
-                    <p className="text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                <div className="bg-zinc-100 bg-zinc-100 rounded-2xl p-6 mb-8">
+                    <p className="text-lg text-zinc-700 text-zinc-700 leading-relaxed">
                         {isCorrect
                             ? "Great job! You've understood the concept perfectly. Here's why this answer is correct..."
                             : "Don't worry! Learning takes practice. Here's what you should know..."

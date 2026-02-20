@@ -19,7 +19,7 @@ export default function ThemeSwitcher() {
     return (
         <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="p-4 rounded-full bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors min-h-[60px] min-w-[60px] flex items-center justify-center"
+            className="p-4 rounded-full bg-zinc-200 bg-zinc-100 hover:bg-zinc-300 hover:bg-zinc-700 transition-colors min-h-[60px] min-w-[60px] flex items-center justify-center"
             aria-label="Toggle theme"
         >
             {theme === 'dark' ? (

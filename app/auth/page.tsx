@@ -4,6 +4,8 @@ import React, { useState, useRef } from 'react';
 import { Phone, CheckCircle, ArrowLeft } from 'lucide-react';
 import Logo from '@/components/shared/Logo';
 import { useAuth } from '@/context/AuthContext';
+import { ConfirmationResult } from 'firebase/auth';
+import Image from 'next/image';
 
 type AuthStep = 'phone' | 'otp';
 
@@ -101,13 +103,23 @@ export default function AuthPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-brand-purple/5 via-white to-brand-orange/5 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 flex items-center justify-center p-6">
-            <div className="w-full max-w-md">
+        <div className="min-h-screen flex items-center justify-center p-6 relative">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+                <Image
+                    src="/images/mature-couple-dealing-with-online-banking-together-home-their-loft.jpg"
+                    alt="Background"
+                    fill
+                    className="object-cover"
+                    priority
+                />
+            </div>
+            <div className="w-full max-w-md relative z-10">
                 {/* Back Button (except on phone step) */}
                 {step !== 'phone' && !isVerified && (
                     <button
                         onClick={() => setStep('phone')}
-                        className="mb-4 flex items-center gap-2 text-brand-purple dark:text-white hover:opacity-70 transition-opacity"
+                        className="mb-4 flex items-center gap-2 text-brand-purple hover:opacity-70 transition-opacity"
                     >
                         <ArrowLeft size={20} />
                         <span className="font-bold">Retour</span>
@@ -115,7 +127,7 @@ export default function AuthPage() {
                 )}
 
                 {/* Auth Card */}
-                <div className="bg-white dark:bg-zinc-900 rounded-[32px] p-8 md:p-10 shadow-2xl transition-all duration-300">
+                <div className="bg-white/50 backdrop-blur-md rounded-[32px] p-8 md:p-10 shadow-2xl transition-all duration-300">
                     {/* Logo */}
                     <div className="flex justify-center mb-8">
                         <Logo size="medium" />
@@ -125,16 +137,16 @@ export default function AuthPage() {
                     {step === 'phone' && (
                         <div className="space-y-6">
                             <div className="text-center">
-                                <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
+                                <h2 className="text-3xl font-black text-zinc-900 mb-2">
                                     Bienvenue sur Le Hub
                                 </h2>
-                                <p className="text-zinc-600 dark:text-zinc-400">
+                                <p className="text-zinc-800 text-zinc-800">
                                     Entrez votre numéro de téléphone familial (8 ou 10 chiffres)
                                 </p>
                             </div>
 
                             {error && (
-                                <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-4">
+                                <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200border-red-800 rounded-2xl p-4">
                                     <p className="text-red-600 dark:text-red-400 text-sm font-bold text-center">
                                         {error}
                                     </p>
@@ -142,13 +154,13 @@ export default function AuthPage() {
                             )}
 
                             <div>
-                                <label className="text-xs uppercase font-bold text-zinc-400 ml-2 block mb-2">
+                                <label className="text-xs uppercase font-bold text-black-400 ml-2 block mb-2">
                                     Numéro de Téléphone
                                 </label>
                                 <div className="flex items-center gap-3">
-                                    <div className="flex items-center gap-2 bg-zinc-100 dark:bg-zinc-800 px-4 py-4 rounded-2xl">
+                                    <div className="flex items-center gap-2 bg-zinc-100 bg-zinc-100 px-4 py-4 rounded-2xl">
                                         <Phone size={20} className="text-brand-purple" />
-                                        <span className="font-bold text-brand-purple dark:text-white">+229</span>
+                                        <span className="font-bold text-brand-purple text-zinc-900">+229</span>
                                     </div>
                                     <input
                                         type="tel"
@@ -156,7 +168,7 @@ export default function AuthPage() {
                                         value={phone}
                                         onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                                         onKeyDown={(e) => e.key === 'Enter' && handleSendCode()}
-                                        className="flex-1 p-4 bg-zinc-100 dark:bg-zinc-800 rounded-2xl border-2 border-transparent focus:border-brand-purple outline-none transition-all text-xl font-bold dark:text-white"
+                                        className="flex-1 p-4 bg-zinc-100 bg-zinc-100 rounded-2xl border-2 border-transparent focus:border-brand-purple outline-none transition-all text-xl font-bold text-zinc-900"
                                         maxLength={10}
                                         disabled={loading}
                                     />
@@ -166,12 +178,12 @@ export default function AuthPage() {
                             <button
                                 onClick={handleSendCode}
                                 disabled={phone.length < 8 || loading}
-                                className="w-full bg-brand-orange hover:bg-brand-orange/90 disabled:bg-zinc-300 disabled:cursor-not-allowed text-white font-black text-lg py-5 rounded-2xl shadow-lg shadow-brand-orange/30 active:scale-95 transition-all duration-300"
+                                className="w-full bg-brand-orange hover:bg-brand-orange/90 disabled:bg-zinc-300 disabled:cursor-not-allowed text-white disabled:text-zinc-500 font-black text-lg py-5 rounded-2xl shadow-lg shadow-brand-orange/30 disabled:shadow-none active:scale-95 transition-all duration-300"
                             >
                                 {loading ? 'ENVOI EN COURS...' : 'ENVOYER LE CODE'}
                             </button>
 
-                            <p className="text-center text-sm text-zinc-500 dark:text-zinc-500">
+                            <p className="text-center text-sm text-black-500 dark:text-black-500">
                                 Nous vous enverrons un code de vérification par SMS
                             </p>
 
@@ -184,16 +196,16 @@ export default function AuthPage() {
                     {step === 'otp' && (
                         <div className="space-y-6">
                             <div className="text-center">
-                                <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
+                                <h2 className="text-3xl font-black text-brand-purple text-zinc-900 mb-2">
                                     Entrez le Code de Vérification
                                 </h2>
-                                <p className="text-zinc-600 dark:text-zinc-400">
+                                <p className="text-zinc-600 text-zinc-600">
                                     Nous avons envoyé un code au +229{phone}
                                 </p>
                             </div>
 
                             {error && (
-                                <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-2xl p-4 animate-in shake">
+                                <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200border-red-800 rounded-2xl p-4 animate-in shake">
                                     <p className="text-red-600 dark:text-red-400 text-sm font-bold text-center">
                                         {error}
                                     </p>
@@ -213,7 +225,7 @@ export default function AuthPage() {
                                         onChange={(e) => handleOtpChange(index, e.target.value)}
                                         onKeyDown={(e) => handleOtpKeyDown(index, e)}
                                         disabled={loading || isVerified}
-                                        className="w-12 h-12 md:w-16 md:h-16 text-center text-2xl md:text-3xl font-black bg-zinc-100 dark:bg-zinc-800 rounded-2xl border-2 border-transparent focus:border-brand-purple outline-none transition-all dark:text-white disabled:opacity-50"
+                                        className="w-12 h-12 md:w-16 md:h-16 text-center text-2xl md:text-3xl font-black bg-zinc-100 bg-zinc-100 rounded-2xl border-2 border-transparent focus:border-brand-purple outline-none transition-all text-zinc-900 disabled:opacity-50"
                                     />
                                 ))}
                             </div>

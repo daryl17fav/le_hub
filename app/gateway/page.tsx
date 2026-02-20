@@ -7,9 +7,9 @@ import Image from 'next/image';
 
 export default function GatewayPage() {
     return (
-        <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col items-center justify-center p-6 md:p-12 transition-colors duration-500 relative overflow-hidden">
+        <main className="min-h-screen bg-zinc-50 bg-zinc-50 flex flex-col items-center justify-center p-6 md:p-12 transition-colors duration-500 relative overflow-hidden">
             {/* Background Image */}
-            <div className="absolute inset-0 z-0 opacity-10 dark:opacity-5">
+            <div className="absolute inset-0 z-0 opacity-10 opacity-10">
                 <Image
                     src="/images/gateway-bg.jpg"
                     alt="Background Pattern"
@@ -26,11 +26,11 @@ export default function GatewayPage() {
                         <div className="bg-brand-purple rounded-2xl p-3 shadow-lg shadow-brand-purple/30">
                             <GraduationCap size={48} className="text-white" />
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-black text-brand-purple dark:text-white tracking-tighter">
+                        <h1 className="text-5xl md:text-6xl font-black text-brand-purple text-zinc-900 tracking-tighter">
                             THE HUB
                         </h1>
                     </div>
-                    <p className="text-2xl md:text-3xl font-bold text-zinc-600 dark:text-zinc-400 max-w-2xl px-4">
+                    <p className="text-2xl md:text-3xl font-bold text-zinc-600 text-zinc-600 max-w-2xl px-4">
                         Autonomiser notre communauté par l'apprentissage.
                     </p>
                 </div>

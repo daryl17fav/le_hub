@@ -18,7 +18,7 @@ const GatewayCard: React.FC<GatewayCardProps> = ({ title, description, Icon, var
 
     const variantStyles = isJunior
         ? "bg-linear-to-br from-brand-purple to-brand-orange text-white"
-        : "bg-white dark:bg-zinc-900 border-4 border-brand-purple text-brand-purple dark:text-brand-purple-light shadow-brand-purple/20";
+        : "bg-white bg-white border-4 border-brand-purple text-brand-purple dark:text-brand-purple-light shadow-brand-purple/20";
 
     return (
         <div

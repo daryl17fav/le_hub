@@ -19,7 +19,7 @@ const TopNav: React.FC<TopNavProps> = ({ activeRoute = '/' }) => {
     ];
 
     return (
-        <nav className="hidden md:flex items-center justify-between px-6 lg:px-8 py-4 bg-white dark:bg-zinc-900 border-b-4 border-brand-purple shadow-lg sticky top-0 z-50 transition-colors duration-300">
+        <nav className="hidden md:flex items-center justify-between px-6 lg:px-8 py-4 bg-white bg-white border-b-4 border-brand-purple shadow-lg sticky top-0 z-50 transition-colors duration-300">
             {/* Logo - Smaller on mobile */}
             <div className="flex-shrink-0">
                 <Logo size="small" />
@@ -37,7 +37,7 @@ const TopNav: React.FC<TopNavProps> = ({ activeRoute = '/' }) => {
                             href={item.href}
                             className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all duration-300 ${isActive
                                 ? 'bg-brand-purple text-white shadow-lg shadow-brand-purple/30'
-                                : 'text-zinc-700 dark:text-zinc-300 hover:bg-brand-purple/10 hover:text-brand-purple'
+                                : 'text-zinc-700 text-zinc-700 hover:bg-brand-purple/10 hover:text-brand-purple'
                                 }`}
                         >
                             <Icon size={20} />
@@ -51,7 +51,7 @@ const TopNav: React.FC<TopNavProps> = ({ activeRoute = '/' }) => {
             <div className="flex items-center gap-3 lg:gap-4">
                 {/* Search Icon */}
                 <button
-                    className="p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                    className="p-2 rounded-xl hover:bg-zinc-100 hover:bg-zinc-800 transition-colors"
                     onClick={() => alert('Search feature coming soon!')}
                     aria-label="Search"
                 >
@@ -60,7 +60,7 @@ const TopNav: React.FC<TopNavProps> = ({ activeRoute = '/' }) => {
 
                 {/* Language/Globe Icon */}
                 <button
-                    className="p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                    className="p-2 rounded-xl hover:bg-zinc-100 hover:bg-zinc-800 transition-colors"
                     onClick={() => alert('Language selection coming soon!')}
                     aria-label="Change Language"
                 >

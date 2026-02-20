@@ -18,9 +18,9 @@ export default function AdultDashboard() {
         <>
             <TopNav activeRoute="/adult" />
 
-            <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 pb-24 md:pb-6 relative overflow-hidden">
+            <main className="min-h-screen bg-zinc-50 bg-zinc-50 p-6 pb-24 md:pb-6 relative overflow-hidden">
                 {/* Background Image */}
-                <div className="absolute inset-0 z-0 opacity-10 dark:opacity-5">
+                <div className="absolute inset-0 z-0 opacity-10 opacity-10">
                     <Image
                         src="/images/adult-bg.jpg"
                         alt="Background Pattern"
@@ -37,10 +37,10 @@ export default function AdultDashboard() {
                                 <Smartphone size={48} className="text-white" />
                             </div>
                             <div>
-                                <h1 className="text-4xl font-black text-brand-purple dark:text-white">
+                                <h1 className="text-4xl font-black text-brand-purple text-zinc-900">
                                     Centre de Compétences pour Adultes
                                 </h1>
-                                <p className="text-lg text-zinc-600 dark:text-zinc-400">
+                                <p className="text-lg text-zinc-600 text-zinc-600">
                                     Développement professionnel pour le succès quotidien
                                 </p>
                             </div>
@@ -49,37 +49,37 @@ export default function AdultDashboard() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border-l-4 border-brand-purple">
+                        <div className="bg-white bg-white rounded-2xl p-6 shadow-lg border-l-4 border-brand-purple">
                             <Briefcase size={32} className="text-brand-purple mb-2" />
                             <p className="text-3xl font-black text-brand-purple">8</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Cours Inscrits</p>
+                            <p className="text-sm text-zinc-600 text-zinc-600">Cours Inscrits</p>
                         </div>
-                        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border-l-4 border-brand-orange">
+                        <div className="bg-white bg-white rounded-2xl p-6 shadow-lg border-l-4 border-brand-orange">
                             <TrendingUp size={32} className="text-brand-orange mb-2" />
                             <p className="text-3xl font-black text-brand-purple">65%</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Progrès Moyen</p>
+                            <p className="text-sm text-zinc-600 text-zinc-600">Progrès Moyen</p>
                         </div>
-                        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border-l-4 border-brand-purple">
+                        <div className="bg-white bg-white rounded-2xl p-6 shadow-lg border-l-4 border-brand-purple">
                             <Award size={32} className="text-brand-purple mb-2" />
                             <p className="text-3xl font-black text-brand-purple">5</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Certificats</p>
+                            <p className="text-sm text-zinc-600 text-zinc-600">Certificats</p>
                         </div>
-                        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg border-l-4 border-brand-orange">
+                        <div className="bg-white bg-white rounded-2xl p-6 shadow-lg border-l-4 border-brand-orange">
                             <span className="text-4xl mb-2">⏱️</span>
                             <p className="text-3xl font-black text-brand-purple">24h</p>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400">Temps d'Apprentissage</p>
+                            <p className="text-sm text-zinc-600 text-zinc-600">Temps d'Apprentissage</p>
                         </div>
                     </div>
 
                     {/* Courses */}
-                    <h2 className="text-2xl font-black text-brand-purple dark:text-white mb-4">
+                    <h2 className="text-2xl font-black text-brand-purple text-zinc-900 mb-4">
                         Vos Cours
                     </h2>
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {courses.map((course) => (
                             <div
                                 key={course.id}
-                                className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border-2 border-transparent hover:border-brand-purple cursor-pointer"
+                                className="bg-white bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all border-2 border-transparent hover:border-brand-purple cursor-pointer"
                                 onClick={() => window.location.href = '/lesson'}
                             >
                                 <div className="flex items-start justify-between mb-4">
@@ -88,17 +88,17 @@ export default function AdultDashboard() {
                                         {course.category}
                                     </span>
                                 </div>
-                                <h3 className="text-xl font-black text-brand-purple dark:text-white mb-2">
+                                <h3 className="text-xl font-black text-brand-purple text-zinc-900 mb-2">
                                     {course.title}
                                 </h3>
                                 <div className="mb-4">
-                                    <div className="bg-zinc-200 dark:bg-zinc-700 rounded-full h-2 overflow-hidden">
+                                    <div className="bg-zinc-200 bg-zinc-200 rounded-full h-2 overflow-hidden">
                                         <div
                                             className="bg-brand-purple h-full transition-all"
                                             style={{ width: `${course.progress}%` }}
                                         />
                                     </div>
-                                    <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">
+                                    <p className="text-sm text-zinc-600 text-zinc-600 mt-2">
                                         {course.progress}% Terminé
                                     </p>
                                 </div>
