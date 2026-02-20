@@ -19,7 +19,7 @@ const Logo: React.FC<LogoProps> = ({ size = 'medium', showText = true }) => {
                 <GraduationCap size={sizeMap[size].icon} className="text-white" />
             </div>
             {showText && (
-                <h1 className={`${sizeMap[size].text} font-black text-brand-purple dark:text-white tracking-tighter`}>
+                <h1 className={`${sizeMap[size].text} font-black text-brand-purple text-zinc-900 tracking-tighter`}>
                     LE HUB
                 </h1>
             )}

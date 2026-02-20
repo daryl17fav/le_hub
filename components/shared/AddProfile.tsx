@@ -44,23 +44,23 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-            <div className="bg-white dark:bg-zinc-900 rounded-[32px] p-8 md:p-10 max-w-md w-full shadow-2xl relative">
+            <div className="bg-white bg-white rounded-[32px] p-8 md:p-10 max-w-md w-full shadow-2xl relative">
                 {/* Close Button */}
                 <button
                     onClick={onCancel}
-                    className="absolute top-6 right-6 p-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                    className="absolute top-6 right-6 p-2 rounded-xl hover:bg-zinc-100 hover:bg-zinc-800 transition-colors"
                 >
-                    <X size={24} className="text-zinc-600 dark:text-zinc-400" />
+                    <X size={24} className="text-zinc-600 text-zinc-600" />
                 </button>
 
                 {/* Step 1: Type Selection */}
                 {step === 'type' && (
                     <div className="space-y-6">
                         <div className="text-center">
-                            <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
+                            <h2 className="text-3xl font-black text-brand-purple text-zinc-900 mb-2">
                                 Ajouter un Membre de la Famille
                             </h2>
-                            <p className="text-zinc-600 dark:text-zinc-400">
+                            <p className="text-zinc-600 text-zinc-600">
                                 Est-ce pour un enfant ou un adulte ?
                             </p>
                         </div>
@@ -75,10 +75,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                                     <div className="w-20 h-20 bg-gradient-to-br from-brand-purple to-brand-orange rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <Backpack size={40} className="text-white" />
                                     </div>
-                                    <span className="font-black text-xl text-brand-purple dark:text-white">
+                                    <span className="font-black text-xl text-brand-purple text-zinc-900">
                                         Junior
                                     </span>
-                                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                                    <span className="text-sm text-zinc-600 text-zinc-600">
                                         Pour les Enfants
                                     </span>
                                 </div>
@@ -93,10 +93,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                                     <div className="w-20 h-20 bg-gradient-to-br from-brand-purple to-brand-orange rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <Smartphone size={40} className="text-white" />
                                     </div>
-                                    <span className="font-black text-xl text-brand-purple dark:text-white">
+                                    <span className="font-black text-xl text-brand-purple text-zinc-900">
                                         Adulte
                                     </span>
-                                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                                    <span className="text-sm text-zinc-600 text-zinc-600">
                                         Pour les Adultes
                                     </span>
                                 </div>
@@ -109,10 +109,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                 {step === 'name' && (
                     <div className="space-y-6">
                         <div className="text-center">
-                            <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
+                            <h2 className="text-3xl font-black text-brand-purple text-zinc-900 mb-2">
                                 Quel est son nom ?
                             </h2>
-                            <p className="text-zinc-600 dark:text-zinc-400">
+                            <p className="text-zinc-600 text-zinc-600">
                                 Cela aide tout le monde à savoir à qui c&apos;est le tour
                             </p>
                         </div>
@@ -121,7 +121,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                             <label className="text-xs uppercase font-bold text-zinc-400 ml-2 block mb-2">
                                 Nom Complet
                             </label>
-                            <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800 rounded-2xl px-4 border-2 border-transparent focus-within:border-brand-purple transition-all">
+                            <div className="flex items-center gap-3 bg-zinc-100 bg-zinc-100 rounded-2xl px-4 border-2 border-transparent focus-within:border-brand-purple transition-all">
                                 <User size={20} className="text-brand-purple" />
                                 <input
                                     type="text"
@@ -129,7 +129,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     onKeyDown={(e) => e.key === 'Enter' && handleNameSubmit()}
-                                    className="flex-1 p-4 bg-transparent outline-none dark:text-white"
+                                    className="flex-1 p-4 bg-transparent outline-none text-zinc-900"
                                     autoFocus
                                 />
                             </div>
@@ -138,7 +138,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setStep('type')}
-                                className="flex-1 py-4 rounded-2xl font-bold text-brand-purple dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                                className="flex-1 py-4 rounded-2xl font-bold text-brand-purple text-zinc-900 hover:bg-zinc-100 hover:bg-zinc-800 transition-colors"
                             >
                                 Retour
                             </button>
@@ -157,10 +157,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                 {step === 'village' && (
                     <div className="space-y-6">
                         <div className="text-center">
-                            <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
+                            <h2 className="text-3xl font-black text-brand-purple text-zinc-900 mb-2">
                                 Sélectionner le Village
                             </h2>
-                            <p className="text-zinc-600 dark:text-zinc-400">
+                            <p className="text-zinc-600 text-zinc-600">
                                 Quel village représentent-ils ?
                             </p>
                         </div>
@@ -169,16 +169,16 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                             <label className="text-xs uppercase font-bold text-zinc-400 ml-2 block mb-2">
                                 Village
                             </label>
-                            <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800 rounded-2xl px-4 border-2 border-transparent focus-within:border-brand-purple transition-all">
+                            <div className="flex items-center gap-3 bg-zinc-100 bg-zinc-100 rounded-2xl px-4 border-2 border-transparent focus-within:border-brand-purple transition-all">
                                 <MapPin size={20} className="text-brand-purple" />
                                 <select
                                     value={village}
                                     onChange={(e) => setVillage(e.target.value)}
-                                    className="flex-1 p-4 bg-transparent outline-none text-zinc-900 dark:text-white cursor-pointer"
+                                    className="flex-1 p-4 bg-transparent outline-none text-zinc-900 text-zinc-900 cursor-pointer"
                                 >
-                                    <option value="" className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">Choisissez un village...</option>
+                                    <option value="" className="bg-white bg-zinc-100 text-zinc-900 dark:text-zinc-100">Choisissez un village...</option>
                                     {villages.map((v) => (
-                                        <option key={v} value={v} className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">{v}</option>
+                                        <option key={v} value={v} className="bg-white bg-zinc-100 text-zinc-900 dark:text-zinc-100">{v}</option>
                                     ))}
                                 </select>
                             </div>
@@ -187,7 +187,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setStep('name')}
-                                className="flex-1 py-4 rounded-2xl font-bold text-brand-purple dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                                className="flex-1 py-4 rounded-2xl font-bold text-brand-purple text-zinc-900 hover:bg-zinc-100 hover:bg-zinc-800 transition-colors"
                             >
                                 Retour
                             </button>
@@ -206,10 +206,10 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                 {step === 'avatar' && (
                     <div className="space-y-6">
                         <div className="text-center">
-                            <h2 className="text-3xl font-black text-brand-purple dark:text-white mb-2">
+                            <h2 className="text-3xl font-black text-brand-purple text-zinc-900 mb-2">
                                 Choisissez une Couleur
                             </h2>
-                            <p className="text-zinc-600 dark:text-zinc-400">
+                            <p className="text-zinc-600 text-zinc-600">
                                 Choisissez la couleur préférée de {name}
                             </p>
                         </div>
@@ -228,7 +228,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setStep('village')}
-                                className="flex-1 py-4 rounded-2xl font-bold text-brand-purple dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                                className="flex-1 py-4 rounded-2xl font-bold text-brand-purple text-zinc-900 hover:bg-zinc-100 hover:bg-zinc-800 transition-colors"
                             >
                                 Retour
                             </button>

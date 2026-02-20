@@ -25,14 +25,14 @@ export default function ArenaPage() {
         <>
             <TopNav activeRoute="/arena" />
 
-            <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 pb-32 md:pb-24">
+            <main className="min-h-screen bg-zinc-50 bg-zinc-50 pb-32 md:pb-24">
                 <div className="max-w-7xl mx-auto p-6">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <h1 className="text-5xl md:text-6xl font-black text-brand-purple dark:text-white mb-2">
+                        <h1 className="text-5xl md:text-6xl font-black text-brand-purple text-zinc-900 mb-2">
                             Compétitions de Village
                         </h1>
-                        <p className="text-xl text-zinc-600 dark:text-zinc-400">
+                        <p className="text-xl text-zinc-600 text-zinc-600">
                             Compétition et Apprentissage Ensemble
                         </p>
                     </div>
@@ -61,8 +61,8 @@ export default function ArenaPage() {
 
                         {/* Leaderboard Panel - Side panel on desktop, below on mobile */}
                         <div className="lg:col-span-1">
-                            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-2xl sticky top-24">
-                                <h2 className="text-2xl font-black text-brand-purple dark:text-white mb-6 flex items-center gap-2">
+                            <div className="bg-white bg-white rounded-3xl p-6 shadow-2xl sticky top-24">
+                                <h2 className="text-2xl font-black text-brand-purple text-zinc-900 mb-6 flex items-center gap-2">
                                     <Medal size={28} className="text-brand-orange" />
                                     Top 10 des Apprenants
                                 </h2>
@@ -73,7 +73,7 @@ export default function ArenaPage() {
                                             key={user.rank}
                                             className={`flex items-center gap-3 p-3 rounded-2xl transition-all ${user.rank <= 3
                                                 ? 'bg-gradient-to-r from-brand-purple/10 to-brand-orange/10 border-2 border-brand-purple'
-                                                : 'bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+                                                : 'bg-zinc-100 bg-zinc-100 hover:bg-zinc-200 hover:bg-zinc-700'
                                                 }`}
                                         >
                                             {/* Rank */}
@@ -89,10 +89,10 @@ export default function ArenaPage() {
 
                                             {/* User Info */}
                                             <div className="flex-1 min-w-0">
-                                                <p className="font-black text-brand-purple dark:text-white truncate">
+                                                <p className="font-black text-brand-purple text-zinc-900 truncate">
                                                     {user.name}
                                                 </p>
-                                                <p className="text-xs text-zinc-600 dark:text-zinc-400 truncate">
+                                                <p className="text-xs text-zinc-600 text-zinc-600 truncate">
                                                     {user.village}
                                                 </p>
                                             </div>
@@ -102,7 +102,7 @@ export default function ArenaPage() {
                                                 <p className="font-black text-xl text-brand-orange">
                                                     {user.points.toLocaleString()}
                                                 </p>
-                                                <p className="text-xs text-zinc-600 dark:text-zinc-400">pts</p>
+                                                <p className="text-xs text-zinc-600 text-zinc-600">pts</p>
                                             </div>
                                         </div>
                                     ))}
@@ -113,24 +113,24 @@ export default function ArenaPage() {
 
                     {/* Challenges Section */}
                     <div className="mt-8 grid md:grid-cols-2 gap-6">
-                        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
-                            <h3 className="text-xl font-black text-brand-purple dark:text-white mb-4">
+                        <div className="bg-white bg-white rounded-2xl p-6 shadow-lg">
+                            <h3 className="text-xl font-black text-brand-purple text-zinc-900 mb-4">
                                 🔥 Défis Hebdomadaires
                             </h3>
-                            <p className="text-zinc-600 dark:text-zinc-400 mb-4">
+                            <p className="text-zinc-600 text-zinc-600 mb-4">
                                 Complétez 5 leçons cette semaine pour gagner des points bonus !
                             </p>
-                            <div className="bg-zinc-100 dark:bg-zinc-800 rounded-full h-3 overflow-hidden">
+                            <div className="bg-zinc-100 bg-zinc-100 rounded-full h-3 overflow-hidden">
                                 <div className="bg-brand-orange h-full" style={{ width: '60%' }} />
                             </div>
-                            <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">3/5 Leçons</p>
+                            <p className="text-sm text-zinc-600 text-zinc-600 mt-2">3/5 Leçons</p>
                         </div>
 
-                        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-lg">
-                            <h3 className="text-xl font-black text-brand-purple dark:text-white mb-4">
+                        <div className="bg-white bg-white rounded-2xl p-6 shadow-lg">
+                            <h3 className="text-xl font-black text-brand-purple text-zinc-900 mb-4">
                                 ⚡ Tour Rapide
                             </h3>
-                            <p className="text-zinc-600 dark:text-zinc-400 mb-4">
+                            <p className="text-zinc-600 text-zinc-600 mb-4">
                                 Répondez à 10 questions en moins de 2 minutes !
                             </p>
                             <button

@@ -44,20 +44,20 @@ const VillageMap: React.FC = () => {
 
                     {/* Village Info Tooltip */}
                     <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                        <div className="bg-white dark:bg-zinc-800 px-4 py-2 rounded-xl shadow-xl border-2 border-brand-purple whitespace-nowrap">
-                            <p className="font-black text-brand-purple dark:text-white text-sm">{village.name}</p>
-                            <p className="text-xs text-zinc-600 dark:text-zinc-400">{village.points.toLocaleString()} points</p>
+                        <div className="bg-white bg-zinc-100 px-4 py-2 rounded-xl shadow-xl border-2 border-brand-purple whitespace-nowrap">
+                            <p className="font-black text-brand-purple text-zinc-900 text-sm">{village.name}</p>
+                            <p className="text-xs text-zinc-600 text-zinc-600">{village.points.toLocaleString()} points</p>
                         </div>
                     </div>
                 </div>
             ))}
 
             {/* Map Legend */}
-            <div className="absolute bottom-4 left-4 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-4 py-3 rounded-xl shadow-lg">
-                <p className="text-xs font-bold text-brand-purple dark:text-white mb-2">Classement des Villages</p>
+            <div className="absolute bottom-4 left-4 bg-white/90 bg-zinc-100/90 backdrop-blur-sm px-4 py-3 rounded-xl shadow-lg">
+                <p className="text-xs font-bold text-brand-purple text-zinc-900 mb-2">Classement des Villages</p>
                 <div className="flex items-center gap-2 text-xs">
                     <div className="w-3 h-3 bg-brand-orange rounded-full"></div>
-                    <span className="text-zinc-700 dark:text-zinc-300">Villages Actifs</span>
+                    <span className="text-zinc-700 text-zinc-700">Villages Actifs</span>
                 </div>
             </div>
         </div>

@@ -1,44 +1,66 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
+import Exercise from '@/components/lesson/Exercise';
 import Stage1 from '@/components/lesson/Stage1';
-import Stage2 from '@/components/lesson/Stage2';
-import Stage3 from '@/components/lesson/Stage3';
-import Stage4 from '@/components/lesson/Stage4';
-import Stage5 from '@/components/lesson/Stage5';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ArrowLeft, RefreshCw } from 'lucide-react';
+
+function LessonContent() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const skill = searchParams.get('skill') || 'math_junior_test';
+    const [showIntro, setShowIntro] = useState(true);
+
+    // Mock student profile - In a real app, fetch from Context/DB
+    const studentProfile = {
+        id: 'student_1',
+        name: 'Junior Learner',
+        age: 8,
+        skillLevels: {
+            'math_junior_test': 1,
+            'reading_adventure': 1
+        }
+    };
+
+    // Show intro first
+    if (showIntro) {
+        return <Stage1 onNext={() => setShowIntro(false)} />;
+    }
+
+    // Then show exercises
+    return (
+        <div className="min-h-screen bg-zinc-50 bg-zinc-50 p-6 flex flex-col">
+            {/* Header / Nav */}
+            <div className="mb-8 max-w-2xl mx-auto w-full">
+                <button
+                    onClick={() => router.back()}
+                    className="flex items-center gap-2 text-zinc-500 hover:text-brand-purple transition-colors font-bold"
+                >
+                    <ArrowLeft size={20} />
+                    Retour
+                </button>
+            </div>
+
+            {/* Main Learning Area */}
+            <div className="flex-1 flex flex-col justify-center">
+                <Exercise
+                    skill={skill}
+                    student={studentProfile}
+                />
+            </div>
+        </div>
+    );
+}
 
 export default function LessonPage() {
-    const [currentStage, setCurrentStage] = useState(1);
-    const router = useRouter();
-
-    const handleNext = () => {
-        if (currentStage < 5) {
-            setCurrentStage(currentStage + 1);
-        }
-    };
-
-    const handleBack = () => {
-        if (currentStage > 1) {
-            setCurrentStage(currentStage - 1);
-        }
-    };
-
-    const handleRetry = () => {
-        setCurrentStage(3); // Go back to quiz
-    };
-
-    const handleComplete = () => {
-        router.push('/junior'); // Return to dashboard
-    };
-
     return (
-        <div className="min-h-screen">
-            {currentStage === 1 && <Stage1 onNext={handleNext} />}
-            {currentStage === 2 && <Stage2 onNext={handleNext} onBack={handleBack} />}
-            {currentStage === 3 && <Stage3 onNext={handleNext} onBack={handleBack} />}
-            {currentStage === 4 && <Stage4 onNext={handleNext} onRetry={handleRetry} isCorrect={true} />}
-            {currentStage === 5 && <Stage5 onComplete={handleComplete} score={100} />}
-        </div>
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center bg-zinc-50 bg-zinc-50">
+                <RefreshCw className="animate-spin text-brand-purple" size={48} />
+            </div>
+        }>
+            <LessonContent />
+        </Suspense>
     );
 }

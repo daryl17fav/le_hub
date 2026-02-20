@@ -71,10 +71,10 @@ export default function SelectProfilePage() {
     // Show loading state
     if (loading) {
         return (
-            <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center">
+            <div className="min-h-screen bg-zinc-50 bg-zinc-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-16 h-16 border-4 border-brand-purple border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-zinc-600 dark:text-zinc-400 font-bold">Chargement...</p>
+                    <p className="text-zinc-600 text-zinc-600 font-bold">Chargement...</p>
                 </div>
             </div>
         );
@@ -86,9 +86,9 @@ export default function SelectProfilePage() {
     }
 
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center p-6 relative overflow-hidden">
+        <div className="min-h-screen bg-zinc-50 bg-zinc-50 flex items-center justify-center p-6 relative overflow-hidden">
             {/* Background Image */}
-            {/* <div className="absolute inset-0 z-0 opacity-10 dark:opacity-5">
+            {/* <div className="absolute inset-0 z-0 opacity-10 opacity-10">
                 <Image
                     src="/images/select-profile-bg.jpg"
                     alt="Background Pattern"
@@ -105,10 +105,10 @@ export default function SelectProfilePage() {
 
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-black text-brand-purple dark:text-white mb-3">
+                    <h1 className="text-4xl md:text-5xl font-black text-brand-purple text-zinc-900 mb-3">
                         {profiles.length === 0 ? 'Bienvenue !' : 'Qui apprend aujourd\'hui ?'}
                     </h1>
-                    <p className="text-xl text-zinc-600 dark:text-zinc-400">
+                    <p className="text-xl text-zinc-600 text-zinc-600">
                         {profiles.length === 0
                             ? 'Créez votre premier profil pour commencer'
                             : 'Sélectionnez votre profil pour continuer'}
@@ -126,7 +126,7 @@ export default function SelectProfilePage() {
                             <button
                                 key={profile.id}
                                 onClick={() => navigateToProfile(profile)}
-                                className="group relative bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95"
+                                className="group relative bg-white bg-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95"
                             >
                                 {/* Avatar Circle */}
                                 <div className={`w-24 h-24 mx-auto mb-4 rounded-full ${avatarColor.bg} border-4 ${avatarColor.border} flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -134,7 +134,7 @@ export default function SelectProfilePage() {
                                 </div>
 
                                 {/* Name */}
-                                <p className="font-black text-xl text-brand-purple dark:text-white mb-1 truncate">
+                                <p className="font-black text-xl text-brand-purple text-zinc-900 mb-1 truncate">
                                     {profile.name}
                                 </p>
 
@@ -148,7 +148,7 @@ export default function SelectProfilePage() {
 
                                 {/* Village */}
                                 {profile.village && (
-                                    <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">
+                                    <p className="text-sm text-zinc-600 text-zinc-600 mt-2">
                                         {profile.village}
                                     </p>
                                 )}
@@ -161,14 +161,14 @@ export default function SelectProfilePage() {
                         onClick={() => setShowAddProfile(true)}
                         className="group relative bg-gradient-to-br from-brand-purple/10 to-brand-orange/10 hover:from-brand-purple/20 hover:to-brand-orange/20 rounded-3xl p-6 border-4 border-dashed border-brand-purple/30 hover:border-brand-purple transition-all hover:scale-105 active:scale-95"
                     >
-                        <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white dark:bg-zinc-800 border-4 border-brand-purple flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white bg-zinc-100 border-4 border-brand-purple flex items-center justify-center group-hover:scale-110 transition-transform">
                             <Plus size={40} className="text-brand-purple" />
                         </div>
 
-                        <p className="font-black text-xl text-brand-purple dark:text-white">
+                        <p className="font-black text-xl text-brand-purple text-zinc-900">
                             Ajouter un Membre
                         </p>
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
+                        <p className="text-sm text-zinc-600 text-zinc-600 mt-1">
                             Créer un nouveau profil
                         </p>
                     </button>
