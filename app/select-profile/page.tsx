@@ -35,21 +35,8 @@ export default function SelectProfilePage() {
         avatarIndex: number
     }) => {
         try {
-            await addProfile({
-                name: newProfile.name,
-                type: newProfile.type,
-                village: newProfile.village,
-                avatar: `avatar-${newProfile.avatarIndex}`
-            });
-
+            await addProfile(newProfile);
             setShowAddProfile(false);
-
-            // Navigate to appropriate dashboard
-            if (newProfile.type === 'junior') {
-                router.push('/junior');
-            } else {
-                router.push('/adult');
-            }
         } catch (error) {
             console.error('Error adding profile:', error);
             alert('Échec de l\'ajout du profil. Veuillez réessayer.');
@@ -57,139 +44,102 @@ export default function SelectProfilePage() {
     };
 
     const navigateToProfile = (profile: UserProfile) => {
-        // Store selected profile
         localStorage.setItem('currentProfile', JSON.stringify(profile));
-
-        // Navigate based on type
-        if (profile.type === 'junior') {
+        if (profile.path === 'junior' || (profile as any).role === 'junior') {
             router.push('/junior');
         } else {
             router.push('/adult');
         }
     };
 
-    // Show loading state
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-brand-purple border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-zinc-600 dark:text-zinc-400 font-bold">Chargement...</p>
-                </div>
-            </div>
-        );
-    }
+    if (loading) return <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-white">Chargement...</div>;
+    if (!user) return null;
 
-    // Don't render if not authenticated
-    if (!user) {
-        return null;
+    // Registration State (No profiles)
+    if (profiles.length === 0 && !showAddProfile) {
+        // Auto-show add profile or show a landing state that leads to it
+        // Prompt says: "If no profiles exist, show a form with..."
+        // We can use the AddProfile component directly or trigger it.
+        // Let's render a welcome screen that allows adding.
+        return (
+            <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 text-center">
+                <Logo size="medium" />
+                <h1 className="text-4xl font-black text-white mt-8 mb-4">Bienvenue sur The Hub</h1>
+                <p className="text-zinc-400 mb-8 max-w-md">Commencez par ajouter votre premier membre de la famille.</p>
+                <button
+                    onClick={() => setShowAddProfile(true)}
+                    className="bg-brand-purple hover:bg-brand-purple/90 text-white font-bold py-4 px-8 rounded-full text-xl shadow-lg transition-all"
+                >
+                    Créer un Profil
+                </button>
+
+                {/* Add Profile Modal */}
+                {showAddProfile && (
+                    <AddProfile
+                        onComplete={handleAddProfile}
+                        onCancel={() => setShowAddProfile(false)}
+                    />
+                )}
+            </div>
+        )
     }
 
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center p-6 relative overflow-hidden">
-            {/* Background Image */}
-            {/* <div className="absolute inset-0 z-0 opacity-10 dark:opacity-5">
-                <Image
-                    src="/images/select-profile-bg.jpg"
-                    alt="Background Pattern"
-                    fill
-                    className="object-cover"
-                />
-            </div> */}
-
-            <div className="w-full max-w-4xl relative z-10">
-                {/* Logo */}
-                <div className="flex justify-center mb-8">
-                    <Logo size="medium" />
+        <div className="min-h-screen bg-zinc-950 flex flex-col items-center p-6">
+            <div className="w-full max-w-5xl mt-8">
+                <div className="flex justify-between items-center mb-12">
+                    <Logo size="small" />
+                    <button onClick={() => { localStorage.clear(); router.push('/auth'); }} className="text-sm text-zinc-500 hover:text-white">
+                        Déconnexion ({user.phone})
+                    </button>
                 </div>
 
-                {/* Header */}
-                <div className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-black text-brand-purple dark:text-white mb-3">
-                        {profiles.length === 0 ? 'Bienvenue !' : 'Qui apprend aujourd\'hui ?'}
-                    </h1>
-                    <p className="text-xl text-zinc-600 dark:text-zinc-400">
-                        {profiles.length === 0
-                            ? 'Créez votre premier profil pour commencer'
-                            : 'Sélectionnez votre profil pour continuer'}
-                    </p>
-                </div>
+                <h1 className="text-4xl md:text-5xl font-black text-white text-center mb-12">
+                    Qui est-ce ?
+                </h1>
 
                 {/* Profiles Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-                    {/* Existing Profiles */}
-                    {profiles.map((profile: UserProfile) => {
-                        const avatarColor = AVATAR_COLORS[parseInt(profile.id) % AVATAR_COLORS.length];
-                        const Icon = profile.type === 'junior' ? Backpack : Smartphone;
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    {profiles.map((profile) => {
+                        const isJunior = profile.path === 'junior' || (profile as any).role === 'junior';
+                        const themeColor = isJunior ? 'brand-purple' : 'brand-orange';
+                        const borderColor = isJunior ? 'border-brand-purple' : 'border-brand-orange';
+                        const bgColor = isJunior ? 'bg-brand-purple/20' : 'bg-brand-orange/20';
+                        const Icon = isJunior ? Backpack : Smartphone;
 
                         return (
                             <button
                                 key={profile.id}
                                 onClick={() => navigateToProfile(profile)}
-                                className="group relative bg-white dark:bg-zinc-900 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95"
+                                className="group flex flex-col items-center gap-4"
                             >
-                                {/* Avatar Circle */}
-                                <div className={`w-24 h-24 mx-auto mb-4 rounded-full ${avatarColor.bg} border-4 ${avatarColor.border} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                                    <Icon size={40} className="text-white" />
+                                <div className={`w-32 h-32 rounded-full ${bgColor} border-4 ${borderColor} flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl`}>
+                                    {/* Use Avatar or Icon */}
+                                    <Icon size={48} className={`text-${themeColor === 'brand-purple' ? 'brand-purple' : 'brand-orange'}`} />
                                 </div>
-
-                                {/* Name */}
-                                <p className="font-black text-xl text-brand-purple dark:text-white mb-1 truncate">
-                                    {profile.name}
-                                </p>
-
-                                {/* Type Badge */}
-                                <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${profile.type === 'junior'
-                                    ? 'bg-brand-purple/10 text-brand-purple'
-                                    : 'bg-brand-orange/10 text-brand-orange'
-                                    }`}>
-                                    {profile.type === 'junior' ? 'Junior' : 'Adulte'}
+                                <span className={`text-xl font-bold text-white group-hover:text-${themeColor === 'brand-purple' ? 'brand-purple' : 'brand-orange'} transition-colors`}>
+                                    {profile.full_name || (profile as any).name}
                                 </span>
-
-                                {/* Village */}
-                                {profile.village && (
-                                    <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2">
-                                        {profile.village}
-                                    </p>
-                                )}
                             </button>
-                        );
+                        )
                     })}
 
-                    {/* Add Profile Button */}
+                    {/* Add Button */}
                     <button
                         onClick={() => setShowAddProfile(true)}
-                        className="group relative bg-gradient-to-br from-brand-purple/10 to-brand-orange/10 hover:from-brand-purple/20 hover:to-brand-orange/20 rounded-3xl p-6 border-4 border-dashed border-brand-purple/30 hover:border-brand-purple transition-all hover:scale-105 active:scale-95"
+                        className="group flex flex-col items-center gap-4"
                     >
-                        <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white dark:bg-zinc-800 border-4 border-brand-purple flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Plus size={40} className="text-brand-purple" />
+                        <div className="w-32 h-32 rounded-full bg-zinc-800 border-4 border-dashed border-zinc-700 flex items-center justify-center group-hover:border-white transition-all">
+                            <Plus size={48} className="text-zinc-500 group-hover:text-white" />
                         </div>
-
-                        <p className="font-black text-xl text-brand-purple dark:text-white">
-                            Ajouter un Membre
-                        </p>
-                        <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-                            Créer un nouveau profil
-                        </p>
-                    </button>
-                </div>
-
-                {/* Family Info */}
-                <div className="text-center text-sm text-zinc-500 dark:text-zinc-600">
-                    <p>Compte Familial : {user.phoneNumber}</p>
-                    <button
-                        onClick={() => {
-                            localStorage.clear();
-                            router.push('/auth');
-                        }}
-                        className="text-brand-purple dark:text-brand-orange hover:underline mt-2"
-                    >
-                        Changer de Numéro de Téléphone
+                        <span className="text-xl font-bold text-zinc-500 group-hover:text-white transition-colors">
+                            Ajouter
+                        </span>
                     </button>
                 </div>
             </div>
 
-            {/* Add Profile Modal */}
+            {/* Modal */}
             {showAddProfile && (
                 <AddProfile
                     onComplete={handleAddProfile}

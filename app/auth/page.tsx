@@ -4,22 +4,22 @@ import React, { useState, useRef } from 'react';
 import { Phone, CheckCircle, ArrowLeft } from 'lucide-react';
 import Logo from '@/components/shared/Logo';
 import { useAuth } from '@/context/AuthContext';
-import { ConfirmationResult } from 'firebase/auth';
 
 type AuthStep = 'phone' | 'otp';
 
 export default function AuthPage() {
-    const { signInWithPhone, confirmOtp } = useAuth();
+    const { signInWithPhone, verifyOtp } = useAuth();
     const [step, setStep] = useState<AuthStep>('phone');
     const [phone, setPhone] = useState('');
-    const [otp, setOtp] = useState(['', '', '', '', '', '']);
+    const [formattedPhone, setFormattedPhone] = useState('');
+    const [otp, setOtp] = useState(['', '', '', '', '']);
     const [isVerified, setIsVerified] = useState(false);
-    const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+
+    // const [confirmationResult, setConfirmationResult] = useState<any | null>(null);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const otpRefs = [
-        useRef<HTMLInputElement>(null),
         useRef<HTMLInputElement>(null),
         useRef<HTMLInputElement>(null),
         useRef<HTMLInputElement>(null),
@@ -33,10 +33,12 @@ export default function AuthPage() {
             setLoading(true);
             setError('');
             try {
-                const formattedPhone = `+229${phone}`;
-                console.log('Sending code to:', formattedPhone);
-                const result = await signInWithPhone(formattedPhone);
-                setConfirmationResult(result);
+                // Strip leading '0' if present, then prepend country code
+                const normalized = phone.startsWith('0') ? phone.slice(1) : phone;
+                const formatted = `+229${normalized}`;
+                setFormattedPhone(formatted);
+                console.log('Sending code to:', formatted);
+                await signInWithPhone(formatted);
                 setStep('otp');
             } catch (err: unknown) {
                 console.error('Error sending code:', err);
@@ -56,25 +58,24 @@ export default function AuthPage() {
             setOtp(newOtp);
 
             // Auto-focus next input
-            if (value && index < 5) {
+            if (value && index < 4) {
                 otpRefs[index + 1].current?.focus();
             }
 
-            // Auto-verify when all 6 digits entered
+            // Auto-verify when all 5 digits entered
             if (newOtp.every(digit => digit !== '')) {
                 setLoading(true);
                 setError('');
                 try {
                     const otpCode = newOtp.join('');
-                    console.log('Verifying OTP:', otpCode);
-                    if (!confirmationResult) {
-                        throw new Error('Aucun résultat de confirmation trouvé');
-                    }
-                    await confirmOtp(confirmationResult, otpCode);
+                    console.log('Verifying OTP:', otpCode, 'for phone:', formattedPhone);
+                    // Use the exact same formattedPhone that was used in signInWithOtp
+                    await verifyOtp(formattedPhone, otpCode);
+
                     setIsVerified(true);
 
-                    // Store phone number for profile selector
-                    localStorage.setItem('phoneNumber', `+229${phone}`);
+                    // Store the already-formatted phone number for profile selector
+                    localStorage.setItem('phoneNumber', formattedPhone);
 
                     // Redirect to profile selector
                     setTimeout(() => {
@@ -83,7 +84,7 @@ export default function AuthPage() {
                 } catch (err: unknown) {
                     console.error('Error verifying OTP:', err);
                     setError('Code invalide. Veuillez réessayer.');
-                    setOtp(['', '', '', '', '', '']);
+                    setOtp(['', '', '', '', '']);
                     otpRefs[0].current?.focus();
                 } finally {
                     setLoading(false);
@@ -175,7 +176,7 @@ export default function AuthPage() {
                             </p>
 
                             {/* IMPORTANT: reCAPTCHA container - required for Firebase */}
-                            <div id="recaptcha-container"></div>
+                            {/* <div id="recaptcha-container"></div> */}
                         </div>
                     )}
 
@@ -199,7 +200,7 @@ export default function AuthPage() {
                                 </div>
                             )}
 
-                            {/* OTP Input Squares - 6 digits */}
+                            {/* OTP Input Squares - 5 digits */}
                             <div className="flex justify-center gap-2 md:gap-3">
                                 {otp.map((digit, index) => (
                                     <input
@@ -230,9 +231,9 @@ export default function AuthPage() {
                                 <button
                                     onClick={async () => {
                                         setError('');
-                                        setOtp(['', '', '', '', '', '']);
+                                        setOtp(['', '', '', '', '']);
                                         setStep('phone');
-                                        setConfirmationResult(null);
+                                        // setConfirmationResult(null);
                                     }}
                                     disabled={loading}
                                     className="w-full text-brand-purple dark:text-brand-orange font-bold hover:opacity-70 transition-opacity disabled:opacity-50"

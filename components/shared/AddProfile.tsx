@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, MapPin, Backpack, Smartphone, X } from 'lucide-react';
-import { getVillageList } from '@/lib/villages';
 import { AVATAR_COLORS } from '@/lib/config';
+import { supabase } from '@/lib/supabase';
 
 interface AddProfileProps {
     onComplete: (profile: { name: string; type: 'junior' | 'adult'; village: string; avatarIndex: number }) => void;
@@ -16,10 +16,42 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
     const [step, setStep] = useState<Step>('type');
     const [type, setType] = useState<'junior' | 'adult'>('junior');
     const [name, setName] = useState('');
-    const [village, setVillage] = useState('');
+    // selectedVillageId holds the UUID of the chosen village
+    const [selectedVillageId, setSelectedVillageId] = useState('');
     const [avatarIndex, setAvatarIndex] = useState(0);
+    const [villageList, setVillageList] = useState<{ id: string; name: string }[]>([]);
+    const [loadingVillages, setLoadingVillages] = useState(true); // start true — we fetch immediately
+    const [villageError, setVillageError] = useState<string | null>(null);
 
-    const villages = getVillageList();
+    useEffect(() => {
+        const fetchVillages = async () => {
+            // Reset state before each fetch
+            setLoadingVillages(true);
+            setVillageError(null);
+
+            try {
+                // Fetch strictly id + name, ordered alphabetically — matches your RLS policy
+                const { data, error } = await supabase
+                    .from('villages')
+                    .select('id, name')
+                    .order('name', { ascending: true });
+
+                if (error) throw error;
+
+                // ✅ Success block — visible in F12 > Console
+                console.log('[AddProfile] Villages fetched from Supabase:', data);
+                setVillageList(data ?? []);
+            } catch (err: any) {
+                console.error('[AddProfile] Failed to load villages:', err?.message ?? err);
+                setVillageError('Impossible de charger les villages. Réessayez.');
+            } finally {
+                // always runs — this is what unlocks the dropdown
+                setLoadingVillages(false);
+            }
+        };
+
+        fetchVillages();
+    }, []);
 
     const handleTypeSelect = (selectedType: 'junior' | 'adult') => {
         setType(selectedType);
@@ -33,13 +65,14 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
     };
 
     const handleVillageSubmit = () => {
-        if (village) {
+        if (selectedVillageId) {
             setStep('avatar');
         }
     };
 
     const handleComplete = () => {
-        onComplete({ name, type, village, avatarIndex });
+        // Pass the UUID — AuthContext sends this straight to Supabase
+        onComplete({ name, type, village: selectedVillageId, avatarIndex });
     };
 
     return (
@@ -169,16 +202,30 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                             <label className="text-xs uppercase font-bold text-zinc-400 ml-2 block mb-2">
                                 Village
                             </label>
-                            <div className="flex items-center gap-3 bg-zinc-100 dark:bg-zinc-800 rounded-2xl px-4 border-2 border-transparent focus-within:border-brand-purple transition-all">
-                                <MapPin size={20} className="text-brand-purple" />
+
+                            {/* Error banner — only visible when Supabase fetch fails */}
+                            {villageError && (
+                                <p className="text-red-500 text-sm mb-2 ml-2">{villageError}</p>
+                            )}
+
+                            <div className="flex items-center gap-3 bg-zinc-900 rounded-2xl px-4 border-2 border-brand-purple focus-within:border-brand-orange transition-all">
+                                <MapPin size={20} className="text-brand-purple flex-shrink-0" />
                                 <select
-                                    value={village}
-                                    onChange={(e) => setVillage(e.target.value)}
-                                    className="flex-1 p-4 bg-transparent outline-none text-zinc-900 dark:text-white cursor-pointer"
+                                    value={selectedVillageId}
+                                    onChange={(e) => setSelectedVillageId(e.target.value)}
+                                    disabled={loadingVillages}
+                                    className="flex-1 p-4 bg-transparent outline-none text-white cursor-pointer disabled:opacity-50 disabled:cursor-wait"
                                 >
-                                    <option value="" className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">Choisissez un village...</option>
-                                    {villages.map((v) => (
-                                        <option key={v} value={v} className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">{v}</option>
+                                    {/* Fixed placeholder — always present as the empty value */}
+                                    <option value="" disabled className="bg-zinc-900 text-zinc-400">
+                                        {loadingVillages ? 'Chargement des villages...' : 'Choisir votre village'}
+                                    </option>
+
+                                    {villageList.map((v) => (
+                                        // key & value = UUID; display = human name
+                                        <option key={v.id} value={v.id} className="bg-zinc-900 text-white">
+                                            {v.name}
+                                        </option>
                                     ))}
                                 </select>
                             </div>
@@ -193,7 +240,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                             </button>
                             <button
                                 onClick={handleVillageSubmit}
-                                disabled={!village}
+                                disabled={!selectedVillageId || !name.trim()}
                                 className="flex-1 bg-brand-orange hover:bg-brand-orange/90 disabled:bg-zinc-300 disabled:cursor-not-allowed text-white font-black py-4 rounded-2xl shadow-lg shadow-brand-orange/30 transition-all"
                             >
                                 Suivant
