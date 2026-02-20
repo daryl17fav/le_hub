@@ -35,21 +35,8 @@ export default function SelectProfilePage() {
         avatarIndex: number
     }) => {
         try {
-            await addProfile({
-                name: newProfile.name,
-                type: newProfile.type,
-                village: newProfile.village,
-                avatar: `avatar-${newProfile.avatarIndex}`
-            });
-
+            await addProfile(newProfile);
             setShowAddProfile(false);
-
-            // Navigate to appropriate dashboard
-            if (newProfile.type === 'junior') {
-                router.push('/junior');
-            } else {
-                router.push('/adult');
-            }
         } catch (error) {
             console.error('Error adding profile:', error);
             alert('Échec de l\'ajout du profil. Veuillez réessayer.');
@@ -57,19 +44,23 @@ export default function SelectProfilePage() {
     };
 
     const navigateToProfile = (profile: UserProfile) => {
-        // Store selected profile
         localStorage.setItem('currentProfile', JSON.stringify(profile));
-
-        // Navigate based on type
-        if (profile.type === 'junior') {
+        if (profile.path === 'junior' || (profile as any).role === 'junior') {
             router.push('/junior');
         } else {
             router.push('/adult');
         }
     };
 
-    // Show loading state
-    if (loading) {
+    if (loading) return <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-white">Chargement...</div>;
+    if (!user) return null;
+
+    // Registration State (No profiles)
+    if (profiles.length === 0 && !showAddProfile) {
+        // Auto-show add profile or show a landing state that leads to it
+        // Prompt says: "If no profiles exist, show a form with..."
+        // We can use the AddProfile component directly or trigger it.
+        // Let's render a welcome screen that allows adding.
         return (
             <div className="min-h-screen bg-zinc-50 bg-zinc-50 flex items-center justify-center">
                 <div className="text-center">
@@ -77,12 +68,7 @@ export default function SelectProfilePage() {
                     <p className="text-zinc-600 text-zinc-600 font-bold">Chargement...</p>
                 </div>
             </div>
-        );
-    }
-
-    // Don't render if not authenticated
-    if (!user) {
-        return null;
+        )
     }
 
     return (
@@ -116,11 +102,13 @@ export default function SelectProfilePage() {
                 </div>
 
                 {/* Profiles Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
-                    {/* Existing Profiles */}
-                    {profiles.map((profile: UserProfile) => {
-                        const avatarColor = AVATAR_COLORS[parseInt(profile.id) % AVATAR_COLORS.length];
-                        const Icon = profile.type === 'junior' ? Backpack : Smartphone;
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    {profiles.map((profile) => {
+                        const isJunior = profile.path === 'junior' || (profile as any).role === 'junior';
+                        const themeColor = isJunior ? 'brand-purple' : 'brand-orange';
+                        const borderColor = isJunior ? 'border-brand-purple' : 'border-brand-orange';
+                        const bgColor = isJunior ? 'bg-brand-purple/20' : 'bg-brand-orange/20';
+                        const Icon = isJunior ? Backpack : Smartphone;
 
                         return (
                             <button
@@ -128,9 +116,9 @@ export default function SelectProfilePage() {
                                 onClick={() => navigateToProfile(profile)}
                                 className="group relative bg-white bg-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95"
                             >
-                                {/* Avatar Circle */}
-                                <div className={`w-24 h-24 mx-auto mb-4 rounded-full ${avatarColor.bg} border-4 ${avatarColor.border} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                                    <Icon size={40} className="text-white" />
+                                <div className={`w-32 h-32 rounded-full ${bgColor} border-4 ${borderColor} flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl`}>
+                                    {/* Use Avatar or Icon */}
+                                    <Icon size={48} className={`text-${themeColor === 'brand-purple' ? 'brand-purple' : 'brand-orange'}`} />
                                 </div>
 
                                 {/* Name */}
@@ -153,13 +141,13 @@ export default function SelectProfilePage() {
                                     </p>
                                 )}
                             </button>
-                        );
+                        )
                     })}
 
-                    {/* Add Profile Button */}
+                    {/* Add Button */}
                     <button
                         onClick={() => setShowAddProfile(true)}
-                        className="group relative bg-gradient-to-br from-brand-purple/10 to-brand-orange/10 hover:from-brand-purple/20 hover:to-brand-orange/20 rounded-3xl p-6 border-4 border-dashed border-brand-purple/30 hover:border-brand-purple transition-all hover:scale-105 active:scale-95"
+                        className="group flex flex-col items-center gap-4"
                     >
                         <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white bg-zinc-100 border-4 border-brand-purple flex items-center justify-center group-hover:scale-110 transition-transform">
                             <Plus size={40} className="text-brand-purple" />
@@ -189,7 +177,7 @@ export default function SelectProfilePage() {
                 </div>
             </div>
 
-            {/* Add Profile Modal */}
+            {/* Modal */}
             {showAddProfile && (
                 <AddProfile
                     onComplete={handleAddProfile}

@@ -1,241 +1,168 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { auth, db } from '../firebaseConfig';
-import {
-    signInWithPhoneNumber,
-    RecaptchaVerifier,
-    onAuthStateChanged,
-    User,
-    ConfirmationResult
-} from 'firebase/auth';
-import {
-    doc,
-    getDoc,
-    setDoc,
-} from 'firebase/firestore';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { ProfileService } from '@/services/profileService';
+import { UserProfile } from '@/lib/config';
+import { User, Session } from '@supabase/supabase-js';
 
-// Define the shape of a user profile
-export interface UserProfile {
-    id: string;
-    name: string;
-    type: 'junior' | 'adult';
-    village?: string | null;
-    avatar?: string | null;
-    createdAt: string;
-}
+// Re-export UserProfile for convenience
+export type { UserProfile };
 
-// Define the shape of the context value
 interface AuthContextType {
     user: User | null;
-    profiles: UserProfile[];
+    session: Session | null;
     loading: boolean;
-    signInWithPhone: (phoneNumber: string) => Promise<ConfirmationResult>;
-    confirmOtp: (confirmationResult: ConfirmationResult, otp: string) => Promise<User>;
-    addProfile: (profileData: { name: string; type: 'junior' | 'adult'; village?: string; avatar?: string }) => Promise<UserProfile>;
+    profiles: UserProfile[];
+    signInWithPhone: (phone: string) => Promise<{ user: User | null; session: Session | null; weakPassword?: any }>;
+    verifyOtp: (phone: string, token: string) => Promise<{ user: User | null; session: Session | null }>;
     signOut: () => Promise<void>;
+    addProfile: (profile: { name: string; type: 'junior' | 'adult'; village: string; avatarIndex: number }) => Promise<string>;
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
-    profiles: [],
+    session: null,
     loading: true,
-    signInWithPhone: async () => { throw new Error("Not implemented"); },
-    confirmOtp: async () => { throw new Error("Not implemented"); },
-    addProfile: async () => { throw new Error("Not implemented"); },
+    profiles: [],
+    signInWithPhone: async () => ({ user: null, session: null }),
+    verifyOtp: async () => ({ user: null, session: null }),
     signOut: async () => { },
+    addProfile: async () => '',
 });
 
-export const useAuth = () => useContext(AuthContext);
-
-interface FirebaseAuthProviderProps {
-    children: ReactNode;
-}
-
-declare global {
-    interface Window {
-        recaptchaVerifier: RecaptchaVerifier | null;
-    }
-}
-
-export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [session, setSession] = useState<Session | null>(null);
     const [profiles, setProfiles] = useState<UserProfile[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // Listen to auth state changes
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            if (firebaseUser) {
-                setUser(firebaseUser);
+        // AbortController lets us cancel the in-flight fetch when React 18
+        // Strict Mode unmounts + remounts the component (or when the effect
+        // re-runs). Without this, the first cancelled fetch throws an
+        // unhandled AbortError in the console.
+        const controller = new AbortController();
 
-                try {
-                    // Fetch user's profiles from Firestore
-                    const userDocRef = doc(db, 'users', firebaseUser.uid);
-                    const userDoc = await getDoc(userDocRef);
-
-                    if (userDoc.exists()) {
-                        setProfiles(userDoc.data().profiles || []);
-                    } else {
-                        // Create new user document if it doesn't exist
-                        await setDoc(userDocRef, {
-                            phoneNumber: firebaseUser.phoneNumber,
-                            profiles: [],
-                            createdAt: new Date().toISOString()
-                        });
-                        setProfiles([]);
-                    }
-                } catch (error) {
-                    console.error('Firestore error:', error);
-                    // If Firestore is offline or has permission issues, just set empty profiles
-                    setProfiles([]);
+        const getSession = async () => {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (controller.signal.aborted) return; // stale run – bail out
+                setSession(session);
+                setUser(session?.user ?? null);
+                if (session?.user?.phone) {
+                    await loadProfiles(session.user.phone, controller.signal);
                 }
-            } else {
-                setUser(null);
-                setProfiles([]);
+            } catch (error: any) {
+                if (error?.name === 'AbortError') return; // expected – ignore
+                console.error("Error getting session:", error);
+            } finally {
+                if (!controller.signal.aborted) setLoading(false);
             }
-            setLoading(false);
-        });
+        };
 
-        return () => unsubscribe();
+        getSession();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            async (_event, session) => {
+                if (controller.signal.aborted) return;
+                setSession(session);
+                setUser(session?.user ?? null);
+                if (session?.user?.phone) {
+                    await loadProfiles(session.user.phone, controller.signal);
+                } else {
+                    setProfiles([]);
+                    setLoading(false);
+                }
+            }
+        );
+
+        return () => {
+            controller.abort();
+            subscription.unsubscribe();
+        };
     }, []);
 
-    // Initialize reCAPTCHA verifier
-    const setupRecaptcha = () => {
-        if (!window.recaptchaVerifier) {
-            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                size: 'invisible',
-                callback: () => {
-                    // reCAPTCHA solved, allow signInWithPhoneNumber
-                },
-                'expired-callback': () => {
-                    // Response expired. Ask user to solve reCAPTCHA again
-                    console.log('reCAPTCHA expired');
-                }
-            });
-        }
-    };
-
-    // Send SMS code to phone number
-    const signInWithPhone = async (phoneNumber: string) => {
+    const loadProfiles = async (phone: string, signal?: AbortSignal) => {
         try {
-            setupRecaptcha();
-            const appVerifier = window.recaptchaVerifier;
-
-            if (!appVerifier) {
-                throw new Error("Recaptcha verifier not initialized");
-            }
-
-            // Make sure phone number includes country code (e.g., +229)
-            const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+${phoneNumber}`;
-
-            const confirmationResult = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
-
-            console.log('SMS sent successfully');
-            return confirmationResult;
-        } catch (error) {
-            console.error('Error sending SMS:', error);
-
-            // Reset reCAPTCHA on error
-            if (window.recaptchaVerifier) {
-                window.recaptchaVerifier.clear();
-                window.recaptchaVerifier = null;
-            }
-
-            throw error;
+            const fetchedProfiles = await ProfileService.getFamilyProfiles(phone, signal);
+            if (signal?.aborted) return; // don't update state for a cancelled fetch
+            // Map new schema to existing UserProfile type
+            const mappedProfiles: UserProfile[] = (fetchedProfiles || []).map((p: any) => ({
+                id: p.id,
+                account_id: p.account_id,
+                full_name: p.full_name,
+                path: p.role, // Mapping role to path
+                role: p.role,
+                village: p.villages?.name,
+                village_id: p.village_id,
+                points: p.points,
+                avatar_url: p.avatar_url,
+                created_at: new Date(p.created_at),
+                // UI compatibility
+                name: p.full_name,
+                type: p.role
+            }));
+            setProfiles(mappedProfiles);
+        } catch (e: any) {
+            // DOMException properties aren't enumerable – logs as {}.
+            // Guard on signal.aborted first (most reliable), then fall back to
+            // the name/message string check.
+            if (signal?.aborted || e?.name === 'AbortError' || e?.message?.includes('abort')) return;
+            console.error("Failed to load profiles", e);
+        } finally {
+            if (!signal?.aborted) setLoading(false);
         }
     };
 
-    // Verify OTP code
-    const confirmOtp = async (confirmationResult: ConfirmationResult, otp: string) => {
-        try {
-            const result = await confirmationResult.confirm(otp);
-            console.log('User signed in successfully:', result.user);
-            return result.user;
-        } catch (error) {
-            console.error('Error verifying OTP:', error);
-            throw error;
-        }
+    const signInWithPhone = async (phone: string) => {
+        const { data, error } = await supabase.auth.signInWithOtp({
+            phone: phone,
+        });
+
+        if (error) throw error;
+        // Supabase signInWithOtp returns { data: { user: null, session: null }, error: null } usually for SMS
+        // But we return data to be consistent
+        return data as { user: User | null; session: Session | null; weakPassword?: any };
     };
 
-    // Add a new profile to the family account
-    const addProfile = async (profileData: { name: string; type: 'junior' | 'adult'; village?: string; avatar?: string }) => {
-        if (!user) {
-            throw new Error('User must be logged in to add a profile');
-        }
+    const verifyOtp = async (phone: string, token: string) => {
+        const { data, error } = await supabase.auth.verifyOtp({
+            phone: phone,
+            token: token,
+            type: 'sms',
+        });
 
-        try {
-            const userDocRef = doc(db, 'users', user.uid);
-            const newProfile: UserProfile = {
-                id: Date.now().toString(), // Simple ID generation
-                name: profileData.name,
-                type: profileData.type, // 'junior' or 'adult'
-                village: profileData.village || null,
-                avatar: profileData.avatar || null,
-                createdAt: new Date().toISOString()
-            };
-
-            // Get current profiles or create new array
-            const currentProfiles = [...profiles, newProfile];
-
-            // Use setDoc with merge to create document if it doesn't exist
-            await setDoc(userDocRef, {
-                phoneNumber: user.phoneNumber,
-                profiles: currentProfiles,
-                updatedAt: new Date().toISOString()
-            }, { merge: true });
-
-            setProfiles(currentProfiles);
-            return newProfile;
-        } catch (error: unknown) {
-            console.error('Error adding profile:', error);
-
-            // If Firestore is offline, still update local state
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const e = error as any;
-            if (e.code === 'unavailable' || e.message?.includes('offline')) {
-                const newProfile: UserProfile = {
-                    id: Date.now().toString(),
-                    name: profileData.name,
-                    type: profileData.type,
-                    village: profileData.village || null,
-                    avatar: profileData.avatar || null,
-                    createdAt: new Date().toISOString()
-                };
-                setProfiles(prev => [...prev, newProfile]);
-                console.warn('Profile added locally, will sync when online');
-                return newProfile;
-            }
-
-            throw error;
-        }
+        if (error) throw error;
+        return data as { user: User | null; session: Session | null };
     };
 
-    // Sign out
     const signOut = async () => {
-        try {
-            await auth.signOut();
-            setUser(null);
-            setProfiles([]);
-        } catch (error) {
-            console.error('Error signing out:', error);
-            throw error;
-        }
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        // State updates will be handled by onAuthStateChange
     };
 
-    const value = {
-        user,
-        profiles,
-        loading,
-        signInWithPhone,
-        confirmOtp,
-        addProfile,
-        signOut
+    const addProfileWrapper = async (profile: { name: string; type: 'junior' | 'adult'; village: string; avatarIndex: number }) => {
+        if (!user?.phone) throw new Error("User not authenticated");
+
+        // profile.village is already a UUID — AddProfile sets value={v.id} on the select
+        const newProfile = await ProfileService.registerProfile(
+            user.phone,
+            profile.name,
+            profile.type,
+            profile.village
+        );
+
+        await loadProfiles(user.phone);
+        return newProfile.id;
     };
 
     return (
-        <AuthContext.Provider value={value}>
+        <AuthContext.Provider value={{ user, session, loading, profiles, signInWithPhone, verifyOtp, signOut, addProfile: addProfileWrapper }}>
             {children}
         </AuthContext.Provider>
     );
-}
+};
+
+export const useAuth = () => useContext(AuthContext);

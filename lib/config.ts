@@ -8,42 +8,9 @@
 // ============================================
 // FIREBASE CONFIGURATION
 // ============================================
-// Recommended for phone authentication (SMS OTP)
-// 
-// Setup Instructions:
-// 1. Create a Firebase project at https://console.firebase.google.com
-// 2. Enable Phone Authentication in Authentication > Sign-in method
-// 3. Add your app's domain to authorized domains
-// 4. Copy your config from Project Settings > General
-// 5. Uncomment the code below and paste your config
+// [REMOVED] Firebase has been removed from this project.
+// Please use Supabase configuration below.
 
-/*
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-
-// Phone Auth Setup
-// In your auth component, use:
-// import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-// window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-//   size: 'invisible'
-// });
-// const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
-// await confirmationResult.confirm(code);
-*/
 
 // ============================================
 // SUPABASE CONFIGURATION
@@ -55,14 +22,8 @@ export const db = getFirestore(app);
 // 2. Get your URL and anon key from Project Settings > API
 // 3. Uncomment the code below and paste your credentials
 
-/*
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'YOUR_SUPABASE_URL';
-const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-*/
+// Single source of truth — import the singleton, do NOT call createClient again here
+export { supabase } from '@/lib/supabase';
 
 // ============================================
 // FAMILY ACCOUNT STRUCTURE
@@ -77,13 +38,17 @@ export interface FamilyAccount {
 
 export interface UserProfile {
     id: string;
-    name: string;
-    type: 'junior' | 'adult';
-    avatarIndex: number; // 0-4 for different colors
-    village: string;
+    account_id: string;
+    full_name: string;
+    path: 'junior' | 'adult';
+    village_id?: string;
     points: number;
-    lessonsCompleted: number;
-    createdAt: Date;
+    avatar_url: string;
+    created_at: Date;
+    // UI Helpers (mapped from DB or derived)
+    village?: string;
+    name?: string;
+    type?: 'junior' | 'adult';
 }
 
 // Avatar color options
@@ -99,66 +64,7 @@ export const AVATAR_COLORS = [
 // HELPER FUNCTIONS
 // ============================================
 
-export const getProfiles = async (phoneNumber: string): Promise<UserProfile[]> => {
-    // TODO: Implement with Firebase or Supabase
-    console.log('Getting profiles for:', phoneNumber);
-
-    // Firebase example:
-    // const profilesRef = collection(db, 'accounts', phoneNumber, 'profiles');
-    // const snapshot = await getDocs(profilesRef);
-    // return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as UserProfile));
-
-    // For demo, return mock data
-    return [];
-};
-
-export const createProfile = async (
-    phoneNumber: string,
-    profile: Omit<UserProfile, 'id' | 'createdAt' | 'points' | 'lessonsCompleted'>
-): Promise<string> => {
-    // TODO: Implement with Firebase or Supabase
-    console.log('Creating profile:', { phoneNumber, profile });
-
-    // Firebase example:
-    // const profilesRef = collection(db, 'accounts', phoneNumber, 'profiles');
-    // const docRef = await addDoc(profilesRef, {
-    //   ...profile,
-    //   points: 0,
-    //   lessonsCompleted: 0,
-    //   createdAt: new Date()
-    // });
-    // return docRef.id;
-
-    return 'mock-profile-id';
-};
-
-export const updateProfile = async (
-    phoneNumber: string,
-    profileId: string,
-    updates: Partial<UserProfile>
-): Promise<void> => {
-    // TODO: Implement with Firebase or Supabase
-    console.log('Updating profile:', { phoneNumber, profileId, updates });
-
-    // Firebase example:
-    // const profileRef = doc(db, 'accounts', phoneNumber, 'profiles', profileId);
-    // await updateDoc(profileRef, updates);
-};
-
-export const getProfile = async (
-    phoneNumber: string,
-    profileId: string
-): Promise<UserProfile | null> => {
-    // TODO: Implement with Firebase or Supabase
-    console.log('Getting profile:', { phoneNumber, profileId });
-
-    // Firebase example:
-    // const profileRef = doc(db, 'accounts', phoneNumber, 'profiles', profileId);
-    // const snapshot = await getDoc(profileRef);
-    // return snapshot.exists() ? { id: snapshot.id, ...snapshot.data() } as UserProfile : null;
-
-    return null;
-};
+// Logic moved to services/profileService.ts
 
 // Placeholder export
 export const config = {
