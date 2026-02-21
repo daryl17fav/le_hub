@@ -13,14 +13,16 @@ const animalQuestions = [
         options: ["Dauphin", "Chat", "Lion", "Chien"],
         correctAnswer: "Dauphin",
         difficulty: 1,
-        emoji: "🌊"
+        emoji: "🌊",
+        image: "/images/lessons/dauphin.jpg"
     },
     {
         question: "Quel animal vole dans le ciel ?",
         options: ["Oiseau", "Chien", "Poisson", "Serpent"],
         correctAnswer: "Oiseau",
         difficulty: 1,
-        emoji: "🦅"
+        emoji: "🦅",
+        image: "/images/lessons/oiseau_en_vole.jpg"
     },
     {
         question: "Quel animal miaule ?",
@@ -34,7 +36,8 @@ const animalQuestions = [
         options: ["Vache", "Lion", "Oiseau", "Serpent"],
         correctAnswer: "Vache",
         difficulty: 1,
-        emoji: "🥛"
+        emoji: "🥛",
+        image: "/images/lessons/vache.jpg"
     },
     // Niveau 2 : Compréhension
     {
@@ -42,7 +45,8 @@ const animalQuestions = [
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 2,
-        emoji: "🐠"
+        emoji: "🐠",
+        image: "/images/lessons/poisson.jpg"
     },
     {
         question: "Tous les animaux peuvent voler.",
@@ -56,7 +60,8 @@ const animalQuestions = [
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 2,
-        emoji: "🦁"
+        emoji: "🦁",
+        image: "/images/lessons/lion.jpg"
     },
     {
         question: "Les serpents ont des pattes.",
@@ -92,7 +97,8 @@ const animalQuestions = [
         options: ["Miel", "Lait", "Beurre", "Pain"],
         correctAnswer: "Miel",
         difficulty: 2,
-        emoji: "🐝"
+        emoji: "🐝",
+        image: "/images/lessons/abeilles.jpg"
     },
     // Niveau 4 : Habitat et comportement
     {
@@ -114,7 +120,8 @@ const animalQuestions = [
         options: ["Mammifère", "Poisson", "Oiseau", "Reptile"],
         correctAnswer: "Mammifère",
         difficulty: 4,
-        emoji: "🐬"
+        emoji: "🐬",
+        image: "/images/lessons/dauphin.jpg"
     }
 ];
 
@@ -136,6 +143,7 @@ export const generateAnimalExercise = (level: SkillLevel): Exercise => {
         question: `${selected.emoji} ${selected.question}`,
         correctAnswer: selected.correctAnswer,
         options: shuffledOptions,
-        difficulty: selected.difficulty
+        difficulty: selected.difficulty,
+        image: selected.image
     };
 };

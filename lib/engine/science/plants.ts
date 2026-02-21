@@ -13,28 +13,32 @@ const plantQuestions = [
         options: ["Eau", "Téléphone", "Voiture", "Pierre"],
         correctAnswer: "Eau",
         difficulty: 1,
-        emoji: "💧"
+        emoji: "💧",
+        image: "/images/lessons/eau.jpg"
     },
     {
         question: "Quelle partie de la plante est sous terre ?",
         options: ["Racine", "Fleur", "Feuille", "Tige"],
         correctAnswer: "Racine",
         difficulty: 1,
-        emoji: "🌿"
+        emoji: "🌿",
+        image: "/images/lessons/racine de plante.jpg"
     },
     {
         question: "Les plantes ont besoin de soleil.",
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 1,
-        emoji: "☀️"
+        emoji: "☀️",
+        image: "/images/lessons/soleil.jpg"
     },
     {
         question: "Quel fruit pousse sur un arbre ?",
         options: ["Pomme", "Poisson", "Pierre", "Chaise"],
         correctAnswer: "Pomme",
         difficulty: 1,
-        emoji: "🍎"
+        emoji: "🍎",
+        image: "/images/lessons/pomme.jpg"
     },
     // Niveau 2 : Compréhension
     {
@@ -42,7 +46,8 @@ const plantQuestions = [
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 2,
-        emoji: "🌳"
+        emoji: "🌳",
+        image: "/images/lessons/arbre.jpg"
     },
     {
         question: "Une plante peut pousser sans eau.",
@@ -63,7 +68,8 @@ const plantQuestions = [
         options: ["Automne", "Été", "Printemps", "Hiver"],
         correctAnswer: "Automne",
         difficulty: 2,
-        emoji: "🍂"
+        emoji: "🍂",
+        image: "/images/lessons/feuille_coloré.jpg"
     },
     // Niveau 3 : Processus
     {
@@ -71,7 +77,8 @@ const plantQuestions = [
         options: ["Avec le soleil", "En dormant", "En marchant", "En chantant"],
         correctAnswer: "Avec le soleil",
         difficulty: 3,
-        emoji: "🌞"
+        emoji: "🌞",
+        image: "/images/lessons/plante.jpg"
     },
     {
         question: "Les graines deviennent des ___.",
@@ -85,14 +92,16 @@ const plantQuestions = [
         options: ["Feuilles", "Racines", "Tronc", "Fleurs"],
         correctAnswer: "Feuilles",
         difficulty: 4,
-        emoji: "🍃"
+        emoji: "🍃",
+        image: "/images/lessons/feuille_verte.jpg"
     },
     {
         question: "Les plantes vertes contiennent de la ___.",
         options: ["Chlorophylle", "Viande", "Pierre", "Métal"],
         correctAnswer: "Chlorophylle",
         difficulty: 4,
-        emoji: "💚"
+        emoji: "💚",
+        image: "/images/lessons/plante.jpg"
     },
     // Niveau 4 : Écosystème
     {
@@ -100,14 +109,16 @@ const plantQuestions = [
         options: ["Elles nettoient l'air", "Elles font du bruit", "Elles sont chaudes", "Elles sont rouges"],
         correctAnswer: "Elles nettoient l'air",
         difficulty: 4,
-        emoji: "🌲"
+        emoji: "🌲",
+        image: "/images/lessons/foret.jpg"
     },
     {
         question: "Les cactus vivent dans le ___.",
         options: ["Désert", "Océan", "Pôle Nord", "Forêt"],
         correctAnswer: "Désert",
         difficulty: 3,
-        emoji: "🌵"
+        emoji: "🌵",
+        image: "/images/lessons/desert.jpg"
     }
 ];
 
@@ -128,6 +139,7 @@ export const generatePlantExercise = (level: SkillLevel): Exercise => {
         question: `${selected.emoji} ${selected.question}`,
         correctAnswer: selected.correctAnswer,
         options: shuffledOptions,
-        difficulty: selected.difficulty
+        difficulty: selected.difficulty,
+        image: selected.image
     };
 };

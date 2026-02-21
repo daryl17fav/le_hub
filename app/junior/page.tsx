@@ -28,15 +28,7 @@ export default function JuniorDashboard() {
             <TopNav activeRoute="/junior" />
 
             <main className="min-h-screen bg-zinc-50 bg-zinc-50 p-6 pb-24 md:pb-6 relative overflow-hidden">
-                {/* Background Image */}
-                <div className="absolute inset-0 z-0 opacity-10 opacity-10">
-                    <Image
-                        src="/images/junior-bg.jpg"
-                        alt="Background Pattern"
-                        fill
-                        className="object-cover"
-                    />
-                </div>
+                {/* Background Pattern removed - image doesn't exist */}
 
                 <div className="max-w-6xl mx-auto relative z-10">
                     {/* Header */}

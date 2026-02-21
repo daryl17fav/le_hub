@@ -278,16 +278,14 @@ const generateLevel2Exercise = (): Exercise => {
     const type = types[Math.floor(Math.random() * types.length)];
 
     const wordsData = [
-        { word: 'CHAT', emoji: '🐱' },
-        { word: 'CHIEN', emoji: '🐶' },
-        { word: 'LION', emoji: '🦁' },
-        { word: 'TIGRE', emoji: '🐯' },
-        { word: 'POULE', emoji: '🐔' },
-        { word: 'VACHE', emoji: '🐮' },
-        { word: 'POMME', emoji: '🍎' },
-        { word: 'BANANE', emoji: '🍌' },
-        { word: 'BALLON', emoji: '⚽' },
-        { word: 'VÉLO', emoji: '🚲' }
+        { word: 'CHIEN', emoji: '🐶', image: '/images/lessons/chien.jpg' },
+        { word: 'LION', emoji: '🦁', image: '/images/lessons/lion.jpg' },
+        { word: 'TIGRE', emoji: '🐯', image: '/images/lessons/tigre.jpg' },
+        { word: 'POULE', emoji: '🐔', image: '/images/lessons/poule.jpg' },
+        { word: 'VACHE', emoji: '🐮', image: '/images/lessons/vache.jpg' },
+        { word: 'POMME', emoji: '🍎', image: '/images/lessons/pomme.jpg' },
+        { word: 'BANANE', emoji: '🍌', image: '/images/lessons/banane.jpg' },
+        { word: 'VÉLO', emoji: '🚲', image: '/images/lessons/velo.jpg' }
     ];
     
     const item = wordsData[Math.floor(Math.random() * wordsData.length)];
@@ -308,7 +306,8 @@ const generateLevel2Exercise = (): Exercise => {
             question: `${item.word} : Quelle est la première lettre ?`,
             correctAnswer: firstLetter,
             options: options,
-            difficulty: 2
+            difficulty: 2,
+            image: item.image
         };
     } else if (type === 'scrambled') {
         // Simple shuffle
@@ -319,10 +318,11 @@ const generateLevel2Exercise = (): Exercise => {
             type: 'input',
             question: `Remets les lettres dans l'ordre : ${scrambled}`,
             correctAnswer: item.word,
-            difficulty: 2
+            difficulty: 2,
+            image: item.image
         };
     } else {
-        // Image match
+        // Image match - Show image, ask for word
         const options = [item.word];
         while (options.length < 3) {
             const random = wordsData[Math.floor(Math.random() * wordsData.length)].word;
@@ -333,10 +333,11 @@ const generateLevel2Exercise = (): Exercise => {
         return {
             id: `read_l2_image_${Date.now()}`,
             type: 'multiple_choice',
-            question: item.emoji, // Show emoji as question
+            question: 'Quel est ce mot ?', // Changed from emoji
             correctAnswer: item.word,
             options: options,
-            difficulty: 2
+            difficulty: 2,
+            image: item.image
         };
     }
 };
@@ -353,10 +354,10 @@ const generateLevel3Exercise = (): Exercise => {
             { text: 'Le ___ aboie.', answer: 'CHIEN', options: ['CHAT', 'CHIEN', 'POISSON'] },
             { text: 'Le ciel est ___.', answer: 'BLEU', options: ['BLEU', 'VERT', 'ROUGE'] },
             { text: 'La banane est ___.', answer: 'JAUNE', options: ['JAUNE', 'ROSE', 'NOIRE'] },
-            { text: 'L\'oiseau ___ dans le ciel.', answer: 'VOLE', options: ['VOLE', 'NAGE', 'MARCHE'] },
+            { text: 'L\'oiseau ___ dans le ciel.', answer: 'VOLE', options: ['VOLE', 'NAGE', 'MARCHE'], image: '/images/lessons/oiseau_en_vole.jpg' },
             { text: 'La vache mange de l\'___.', answer: 'HERBE', options: ['HERBE', 'EAU', 'PIERRE'] },
             { text: 'Le poisson vit dans l\'___.', answer: 'EAU', options: ['EAU', 'AIR', 'TERRE'] },
-            { text: 'En hiver, il y a de la ___.', answer: 'NEIGE', options: ['NEIGE', 'PLUIE', 'SABLE'] },
+            { text: 'En hiver, il y a de la ___.', answer: 'NEIGE', options: ['NEIGE', 'PLUIE', 'SABLE'], image: '/images/lessons/neige.jpg' },
             { text: 'Le feu est très ___.', answer: 'CHAUD', options: ['CHAUD', 'FROID', 'DOUX'] },
             { text: 'La tortue marche ___.', answer: 'LENTEMENT', options: ['LENTEMENT', 'VITE', 'FORT'] },
             { text: 'Le soleil brille le ___.', answer: 'JOUR', options: ['JOUR', 'NUIT', 'SOIR'] },
@@ -371,13 +372,14 @@ const generateLevel3Exercise = (): Exercise => {
             question: item.text,
             correctAnswer: item.answer,
             options: item.options.sort(() => Math.random() - 0.5),
-            difficulty: 3
+            difficulty: 3,
+            image: item.image
         };
     } else {
         const statements = [
             { text: 'Un poisson peut voler.', answer: 'Faux' },
             { text: 'Le feu est chaud.', answer: 'Vrai' },
-            { text: 'La glace est froide.', answer: 'Vrai' },
+            { text: 'La glace est froide.', answer: 'Vrai', image: '/images/lessons/glacons.jpg' },
             { text: 'Une voiture a des roues.', answer: 'Vrai' },
             { text: 'Les chats ont des ailes.', answer: 'Faux' },
             { text: 'La neige est verte.', answer: 'Faux' },
@@ -396,7 +398,8 @@ const generateLevel3Exercise = (): Exercise => {
             question: item.text,
             correctAnswer: item.answer,
             options: ['Vrai', 'Faux'],
-            difficulty: 3
+            difficulty: 3,
+            image: item.image
         };
     }
 };

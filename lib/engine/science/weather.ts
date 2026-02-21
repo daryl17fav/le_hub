@@ -13,21 +13,24 @@ const weatherQuestions = [
         options: ["Parapluie", "Lunettes de soleil", "Short", "Gants"],
         correctAnswer: "Parapluie",
         difficulty: 1,
-        emoji: "☔"
+        emoji: "☔",
+        image: "/images/lessons/parapluie.jpg"
     },
     {
         question: "Quand fait-il chaud ?",
         options: ["En été", "En hiver", "La nuit", "Au pôle Nord"],
         correctAnswer: "En été",
         difficulty: 1,
-        emoji: "☀️"
+        emoji: "☀️",
+        image: "/images/lessons/soleil.jpg"
     },
     {
         question: "Qu'est-ce qui tombe du ciel en hiver ?",
         options: ["Neige", "Fleurs", "Poissons", "Étoiles"],
         correctAnswer: "Neige",
         difficulty: 1,
-        emoji: "❄️"
+        emoji: "❄️",
+        image: "/images/lessons/neige.jpg"
     },
     {
         question: "Le soleil brille le jour.",
@@ -42,21 +45,24 @@ const weatherQuestions = [
         options: ["Eau", "Pierre", "Métal", "Bois"],
         correctAnswer: "Eau",
         difficulty: 2,
-        emoji: "☁️"
+        emoji: "☁️",
+        image: "/images/lessons/nuage.jpg"
     },
     {
         question: "L'arc-en-ciel apparaît après la pluie.",
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 2,
-        emoji: "🌈"
+        emoji: "🌈",
+        image: "/images/lessons/arc_en_ciel.jpg"
     },
     {
         question: "Le vent peut déplacer des objets.",
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 2,
-        emoji: "💨"
+        emoji: "💨",
+        image: "/images/lessons/vent(arbe_coupé).jpg"
     },
     {
         question: "En hiver, il fait ___.",
@@ -107,14 +113,16 @@ const weatherQuestions = [
         options: ["Sec", "Humide", "Froid", "Mouillé"],
         correctAnswer: "Sec",
         difficulty: 3,
-        emoji: "🏜️"
+        emoji: "🏜️",
+        image: "/images/lessons/desert.jpg"
     },
     {
         question: "La glace fond quand il fait chaud.",
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 2,
-        emoji: "🧊"
+        emoji: "🧊",
+        image: "/images/lessons/glacons.jpg"
     }
 ];
 
@@ -135,6 +143,7 @@ export const generateWeatherExercise = (level: SkillLevel): Exercise => {
         question: `${selected.emoji} ${selected.question}`,
         correctAnswer: selected.correctAnswer,
         options: shuffledOptions,
-        difficulty: selected.difficulty
+        difficulty: selected.difficulty,
+        image: selected.image
     };
 };
