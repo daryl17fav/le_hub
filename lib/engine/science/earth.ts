@@ -13,14 +13,16 @@ const earthQuestions = [
         options: ["Terre", "Lune", "Soleil", "Mars"],
         correctAnswer: "Terre",
         difficulty: 1,
-        emoji: "🌍"
+        emoji: "🌍",
+        image: "/images/lessons/istockphoto-1443562748-612x612.jpg"
     },
     {
         question: "Le soleil est une ___.",
         options: ["Étoile", "Planète", "Lune", "Comète"],
         correctAnswer: "Étoile",
         difficulty: 2,
-        emoji: "⭐"
+        emoji: "⭐",
+        image: "/images/lessons/soleil.jpg"
     },
     {
         question: "La Terre est ronde.",
@@ -34,7 +36,8 @@ const earthQuestions = [
         options: ["Lune", "Soleil", "Voiture"],
         correctAnswer: "Lune",
         difficulty: 1,
-        emoji: "🌙"
+        emoji: "🌙",
+        image: "/images/lessons/lune.jpg"
     },
     // Niveau 2 : Géographie
     {
@@ -42,14 +45,16 @@ const earthQuestions = [
         options: ["Grande étendue d'eau", "Montagne", "Désert", "Forêt"],
         correctAnswer: "Grande étendue d'eau",
         difficulty: 2,
-        emoji: "🌊"
+        emoji: "🌊",
+        image: "/images/lessons/ocean.jpg"
     },
     {
         question: "Les montagnes sont très ___.",
         options: ["Hautes", "Plates", "Liquides", "Molles"],
         correctAnswer: "Hautes",
-        difficulty: 1,
-        emoji: "⛰️"
+        difficulty: 2,
+        emoji: "⛰️",
+        image: "/images/lessons/montagne.jpg"
     },
     {
         question: "Un volcan peut cracher du ___.",
@@ -92,7 +97,8 @@ const earthQuestions = [
         options: ["Froid", "Chaud", "Sec", "Doux"],
         correctAnswer: "Froid",
         difficulty: 2,
-        emoji: "🧊"
+        emoji: "🧊",
+        image: "/images/lessons/glacons.jpg"
     },
     // Niveau 4 : Espace
     {
@@ -100,7 +106,8 @@ const earthQuestions = [
         options: ["Soleil", "Lune", "Mars", "Jupiter"],
         correctAnswer: "Soleil",
         difficulty: 4,
-        emoji: "☀️"
+        emoji: "☀️",
+        image: "/images/lessons/etoile.jpg"
     },
     {
         question: "Combien de continents y a-t-il ?",
@@ -121,7 +128,8 @@ const earthQuestions = [
         options: ["Faux", "Vrai"],
         correctAnswer: "Faux",
         difficulty: 4,
-        emoji: "🌕"
+        emoji: "🌕",
+        image: "/images/lessons/lune.jpg"
     }
 ];
 
@@ -142,6 +150,7 @@ export const generateEarthExercise = (level: SkillLevel): Exercise => {
         question: `${selected.emoji} ${selected.question}`,
         correctAnswer: selected.correctAnswer,
         options: shuffledOptions,
-        difficulty: selected.difficulty
+        difficulty: selected.difficulty,
+        image: selected.image
     };
 };

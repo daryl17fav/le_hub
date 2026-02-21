@@ -9,6 +9,7 @@ import Feedback from './Feedback';
 import CompletionScreen from './CompletionScreen';
 import { ArrowRight, RefreshCw, Star } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import Image from 'next/image';
 
 const MAX_QUESTIONS = 10;
 
@@ -163,6 +164,18 @@ export default function Exercise({ skill, student }: ExerciseProps) {
 
             {/* Question */}
             <div className="text-center mb-8">
+                {exercise.image && (
+                    <div className="mb-6 flex justify-center">
+                        <div className="relative w-64 h-64 rounded-2xl overflow-hidden shadow-lg">
+                            <Image
+                                src={exercise.image}
+                                alt="Question"
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                    </div>
+                )}
                 {isMath ? (
                     <>
                         <h2 className="text-4xl md:text-6xl font-black text-brand-purple text-zinc-900 mb-2">
@@ -192,9 +205,9 @@ export default function Exercise({ skill, student }: ExerciseProps) {
                                 }, 100);
                             }}
                             disabled={isCorrect !== null}
-                            className={`p-6 rounded-2xl text-2xl font-bold transition-all transform hover:scale-105 active:scale-95 border-b-4 ${answer === String(option)
+                            className={`p-6 rounded-2xl text-2xl font-bold transition-all transform hover:scale-105 active:scale-95 border-4 ${answer === String(option)
                                 ? 'bg-brand-purple text-white border-brand-purple/50'
-                                : 'bg-white bg-zinc-100 text-zinc-700 dark:text-zinc-200 border-zinc-200border-zinc-700 hover:bg-zinc-50 hover:bg-zinc-700 shadow-lg'
+                                : 'bg-white text-zinc-900 border-zinc-300 hover:bg-brand-purple/10 hover:border-brand-purple shadow-lg'
                                 }`}
                         >
                             {option}

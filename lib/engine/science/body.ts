@@ -13,21 +13,24 @@ const bodyQuestions = [
         options: ["2", "4", "6", "8"],
         correctAnswer: "2",
         difficulty: 1,
-        emoji: "💪"
+        emoji: "💪",
+        image: "/images/lessons/mains.jpg"
     },
     {
         question: "Avec quoi voyons-nous ?",
         options: ["Yeux", "Oreilles", "Nez", "Bouche"],
         correctAnswer: "Yeux",
         difficulty: 1,
-        emoji: "👀"
+        emoji: "👀",
+        image: "/images/lessons/yeux.jpg"
     },
     {
         question: "Le cœur bat dans la poitrine.",
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 1,
-        emoji: "❤️"
+        emoji: "❤️",
+        image: "/images/lessons/coeur.jpg"
     },
     {
         question: "Combien avons-nous de jambes ?",
@@ -56,7 +59,8 @@ const bodyQuestions = [
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 1,
-        emoji: "🦷"
+        emoji: "🦷",
+        image: "/images/lessons/bouche.jpg"
     },
     {
         question: "Le cerveau contrôle le corps.",
@@ -71,7 +75,8 @@ const bodyQuestions = [
         options: ["Squelette", "Cœur", "Peau", "Muscle"],
         correctAnswer: "Squelette",
         difficulty: 3,
-        emoji: "🦴"
+        emoji: "🦴",
+        image: "/images/lessons/Squelette.jpg"
     },
     {
         question: "Combien de sens avons-nous ?",
@@ -107,21 +112,24 @@ const bodyQuestions = [
         options: ["Fort", "Faible", "Malade", "Triste"],
         correctAnswer: "Fort",
         difficulty: 2,
-        emoji: "⚽"
+        emoji: "⚽",
+        image: "/images/lessons/sport.jpg"
     },
     {
         question: "Il faut boire de l'eau chaque jour.",
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 1,
-        emoji: "💧"
+        emoji: "💧",
+        image: "/images/lessons/eau.jpg"
     },
     {
         question: "Le sommeil est important pour le corps.",
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 2,
-        emoji: "😴"
+        emoji: "😴",
+        image: "/images/lessons/sommeil.jpg"
     }
 ];
 
@@ -142,6 +150,7 @@ export const generateBodyExercise = (level: SkillLevel): Exercise => {
         question: `${selected.emoji} ${selected.question}`,
         correctAnswer: selected.correctAnswer,
         options: shuffledOptions,
-        difficulty: selected.difficulty
+        difficulty: selected.difficulty,
+        image: selected.image
     };
 };

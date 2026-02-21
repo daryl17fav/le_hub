@@ -13,21 +13,24 @@ const matterQuestions = [
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 1,
-        emoji: "💧"
+        emoji: "💧",
+        image: "/images/lessons/eau.jpg"
     },
     {
         question: "La glace est de l'eau ___.",
         options: ["Solide", "Liquide", "Gazeuse", "Dure"],
         correctAnswer: "Solide",
         difficulty: 1,
-        emoji: "🧊"
+        emoji: "🧊",
+        image: "/images/lessons/glacons.jpg"
     },
     {
         question: "La vapeur est de l'eau ___.",
         options: ["Gazeuse", "Solide", "Froide", "Chaude"],
         correctAnswer: "Gazeuse",
         difficulty: 2,
-        emoji: "💨"
+        emoji: "💨",
+        image: "/images/lessons/vapeur.jpg"
     },
     {
         question: "Le feu est chaud.",
@@ -42,14 +45,16 @@ const matterQuestions = [
         options: ["Léger", "Lourd", "Dur", "Mou"],
         correctAnswer: "Léger",
         difficulty: 2,
-        emoji: "🎈"
+        emoji: "🎈",
+        image: "/images/lessons/Air_ballon_gonflé.jpg"
     },
     {
         question: "Une pierre coule dans l'eau.",
         options: ["Vrai", "Faux"],
         correctAnswer: "Vrai",
         difficulty: 2,
-        emoji: "🪨"
+        emoji: "🪨",
+        image: "/images/lessons/Pierre_roche.jpg"
     },
     {
         question: "Le bois flotte sur l'eau.",
@@ -114,7 +119,8 @@ const matterQuestions = [
         options: ["Lumière", "Eau", "Pierre", "Son"],
         correctAnswer: "Lumière",
         difficulty: 3,
-        emoji: "🪞"
+        emoji: "🪞",
+        image: "/images/lessons/mirror.jpg"
     },
     {
         question: "L'ombre se forme quand la lumière est bloquée.",
@@ -142,6 +148,7 @@ export const generateMatterExercise = (level: SkillLevel): Exercise => {
         question: `${selected.emoji} ${selected.question}`,
         correctAnswer: selected.correctAnswer,
         options: shuffledOptions,
-        difficulty: selected.difficulty
+        difficulty: selected.difficulty,
+        image: selected.image
     };
 };
