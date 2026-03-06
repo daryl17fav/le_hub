@@ -1,13 +1,10 @@
-import React from 'react';
+import { Village } from '@/services/villageService';
 
-const VillageMap: React.FC = () => {
-    const villages = [
-        { name: 'Village Alpha', points: 12500, x: 20, y: 30 },
-        { name: 'Village Beta', points: 11800, x: 60, y: 20 },
-        { name: 'Village Gamma', points: 10200, x: 40, y: 50 },
-        { name: 'Village Delta', points: 9500, x: 75, y: 60 },
-        { name: 'Village Epsilon', points: 8900, x: 15, y: 70 },
-    ];
+interface VillageMapProps {
+    villages: Village[];
+}
+
+const VillageMap: React.FC<VillageMapProps> = ({ villages }) => {
 
     return (
         <div className="relative w-full h-[400px] md:h-[500px] bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-900 rounded-3xl overflow-hidden shadow-2xl">
@@ -26,9 +23,9 @@ const VillageMap: React.FC = () => {
             {/* Village Markers */}
             {villages.map((village) => (
                 <div
-                    key={village.name}
+                    key={village.id}
                     className="absolute transform -translate-x-1/2 -translate-y-1/2 group cursor-pointer"
-                    style={{ left: `${village.x}%`, top: `${village.y}%` }}
+                    style={{ left: `${village.map_x}%`, top: `${village.map_y}%` }}
                 >
                     {/* Village Icon */}
                     <div className="relative">
@@ -38,7 +35,7 @@ const VillageMap: React.FC = () => {
 
                         {/* Points Badge */}
                         <div className="absolute -top-2 -right-2 bg-brand-orange text-white text-xs font-black px-2 py-1 rounded-full shadow-lg whitespace-nowrap">
-                            {(village.points / 1000).toFixed(1)}k
+                            {(village.total_points / 1000).toFixed(1)}k
                         </div>
                     </div>
 
@@ -46,7 +43,7 @@ const VillageMap: React.FC = () => {
                     <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                         <div className="bg-white bg-zinc-100 px-4 py-2 rounded-xl shadow-xl border-2 border-brand-purple whitespace-nowrap">
                             <p className="font-black text-brand-purple text-zinc-900 text-sm">{village.name}</p>
-                            <p className="text-xs text-zinc-600 text-zinc-600">{village.points.toLocaleString()} points</p>
+                            <p className="text-xs text-zinc-600 text-zinc-600">{village.total_points.toLocaleString()} points</p>
                         </div>
                     </div>
                 </div>

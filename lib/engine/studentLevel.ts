@@ -4,9 +4,10 @@ export type SkillLevel = number;
 export interface StudentProfile {
   id: string;
   name: string;
-  age: number;
+  village_id: string;
   skillLevels: Record<string, SkillLevel>;
   accuracyHistory: Record<string, number>;
+  role?: string;
 }
 
 export interface Exercise {

@@ -43,12 +43,14 @@ export interface UserProfile {
     path: 'junior' | 'adult';
     village_id?: string;
     points: number;
+    lessons_finished: number;
     avatar_url: string;
     created_at: Date;
     // UI Helpers (mapped from DB or derived)
     village?: string;
     name?: string;
     type?: 'junior' | 'adult';
+    role?: 'junior' | 'adult';
 }
 
 // Avatar color options

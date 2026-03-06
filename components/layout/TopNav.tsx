@@ -12,14 +12,18 @@ interface TopNavProps {
 
 const TopNav: React.FC<TopNavProps> = ({ activeRoute = '/' }) => {
     const navItems = [
-        { label: 'Home', href: '/select-profile', icon: Home },
-        { label: 'Learn', href: '/junior', icon: BookOpen },
-        { label: 'Arena', href: '/arena', icon: Trophy },
-        { label: 'Profile', href: '/profile', icon: User },
+        { label: 'Accueil', href: '/select-profile', icon: Home },
+        { label: 'Apprendre', href: '/junior', icon: BookOpen },
+        { label: 'Arène', href: '/arena', icon: Trophy },
+        { label: 'Profil', href: '/profile', icon: User },
     ];
 
+    const isAdult = activeRoute.startsWith('/adult');
+    const bgColor = 'bg-white';
+    const borderColor = isAdult ? 'border-brand-orange' : 'border-brand-purple';
+
     return (
-        <nav className="hidden md:flex items-center justify-between px-6 lg:px-8 py-4 bg-white bg-white border-b-4 border-brand-purple shadow-lg sticky top-0 z-50 transition-colors duration-300">
+        <nav className={`hidden md:flex items-center justify-between px-6 lg:px-8 py-4 ${bgColor} border-b-4 ${borderColor} shadow-lg sticky top-0 z-50 transition-colors duration-300`}>
             {/* Logo - Smaller on mobile */}
             <div className="flex-shrink-0">
                 <Logo size="small" />
@@ -36,8 +40,8 @@ const TopNav: React.FC<TopNavProps> = ({ activeRoute = '/' }) => {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all duration-300 ${isActive
-                                ? 'bg-brand-purple text-white shadow-lg shadow-brand-purple/30'
-                                : 'text-zinc-700 text-zinc-700 hover:bg-brand-purple/10 hover:text-brand-purple'
+                                ? isAdult ? 'bg-brand-orange text-white' : 'bg-brand-purple text-white shadow-lg shadow-brand-purple/30'
+                                : isAdult ? 'text-zinc-600 hover:bg-brand-orange/10 hover:text-brand-orange' : 'text-zinc-700 hover:bg-brand-purple/10 hover:text-brand-purple'
                                 }`}
                         >
                             <Icon size={20} />

@@ -6,26 +6,34 @@ import Stage1 from '@/components/lesson/Stage1';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, RefreshCw } from 'lucide-react';
 
+import { useAuth } from '@/context/AuthContext';
+
 function LessonContent() {
+    const { activeProfile, loading } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
     const skill = searchParams.get('skill') || 'math_junior_test';
     const [showIntro, setShowIntro] = useState(true);
 
-    // Mock student profile - In a real app, fetch from Context/DB
+    if (loading) return null;
+    if (!activeProfile) {
+        router.push('/select-profile');
+        return null;
+    }
+
     const studentProfile = {
-        id: 'student_1',
-        name: 'Junior Learner',
-        age: 8,
+        id: activeProfile.id,
+        name: activeProfile.name || activeProfile.full_name,
+        role: activeProfile.role,
+        village_id: activeProfile.village_id,
         skillLevels: {
-            'math_junior_test': 1,
-            'reading_adventure': 1
+            [skill]: 1
         }
     };
 
     // Show intro first
     if (showIntro) {
-        return <Stage1 onNext={() => setShowIntro(false)} />;
+        return <Stage1 skill={skill} onNext={() => setShowIntro(false)} />;
     }
 
     // Then show exercises

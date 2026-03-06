@@ -10,6 +10,8 @@ import CompletionScreen from './CompletionScreen';
 import { ArrowRight, RefreshCw, Star } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import Image from 'next/image';
+import { LessonService } from '@/services/lessonService';
+import { useRouter } from 'next/navigation';
 
 const MAX_QUESTIONS = 10;
 
@@ -19,8 +21,15 @@ type ExerciseProps = {
 };
 
 export default function Exercise({ skill, student }: ExerciseProps) {
+    const router = useRouter();
     // Initialize level from student profile or default to 1
     const [level, setLevel] = useState(student.skillLevels?.[skill] || 1);
+
+    const isAdult = student.role === 'adult';
+    const themeColor = isAdult ? 'brand-orange' : 'brand-purple';
+    const themeFill = isAdult ? 'fill-brand-orange' : 'fill-brand-purple';
+    const themeBg = isAdult ? 'bg-brand-orange/10' : 'bg-brand-purple/10';
+    const themeBorder = isAdult ? 'border-brand-orange' : 'border-brand-purple';
 
     const isMath = skill.startsWith('math');
 
@@ -130,6 +139,50 @@ export default function Exercise({ skill, student }: ExerciseProps) {
         // Stats reset handled in generateSession
     };
 
+    const [isSaving, setIsSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
+
+    // Save lesson progress to backend when completed
+    useEffect(() => {
+        const saveProgress = async () => {
+            if (isCompleted && student.id && student.village_id && !isSaving && !saveError) {
+                setIsSaving(true);
+                console.log("[Exercise] Saving lesson progress for profile:", student.id, "Lesson ID:", skill);
+                
+                try {
+                    const { error } = await LessonService.completeLessonTransaction(
+                        student.id,
+                        student.village_id,
+                        skill, // acting as lessonId
+                        sessionStats.correct
+                    );
+
+                    if (error) {
+                        console.error("[Exercise] DB Error Detail:", error.message, error.hint || "No hint");
+                        setSaveError(error.message || "Failed to save");
+                    } else {
+                        console.log("[Exercise] SUCCESS: Save confirmed by database!");
+                        
+                        // Local fallback
+                        const localKey = `completed_lessons_${student.id}`;
+                        const localData = localStorage.getItem(localKey);
+                        const completed = localData ? JSON.parse(localData) : [];
+                        if (!completed.includes(skill)) {
+                            completed.push(skill);
+                            localStorage.setItem(localKey, JSON.stringify(completed));
+                        }
+                    }
+                } catch (err: any) {
+                    console.error("[Exercise] Network/Connection Exception:", err.message || err);
+                    setSaveError(err.message || "Exception during save");
+                } finally {
+                    setIsSaving(false);
+                }
+            }
+        };
+        saveProgress();
+    }, [isCompleted, student.id, student.village_id, skill, sessionStats.correct, isSaving, saveError]);
+
     // Show completion screen if session is done
     if (isCompleted) {
         return (
@@ -138,6 +191,8 @@ export default function Exercise({ skill, student }: ExerciseProps) {
                 total={sessionStats.total}
                 onRestart={handleRestart}
                 onNextLevel={level < 4 ? handleNextLevel : undefined}
+                isSaving={isSaving}
+                error={saveError}
             />
         );
     }
@@ -152,12 +207,12 @@ export default function Exercise({ skill, student }: ExerciseProps) {
         <div className="bg-white bg-white rounded-3xl shadow-xl p-6 md:p-8 max-w-2xl mx-auto border-2 border-zinc-100border-zinc-800">
             {/* Header Level Indicator */}
             <div className="flex justify-between items-center mb-8">
-                <div className="flex items-center gap-2 bg-brand-purple/10 px-4 py-2 rounded-full">
-                    <Star size={20} className="text-brand-purple fill-brand-purple" />
-                    <span className="font-bold text-brand-purple">Niveau {level}</span>
+                <div className={`flex items-center gap-2 ${themeBg} px-4 py-2 rounded-full`}>
+                    <Star size={20} className={`text-${themeColor} ${themeFill}`} />
+                    <span className={`font-bold text-${themeColor}`}>Niveau {level}</span>
                 </div>
                 <div className="text-sm font-bold">
-                    <span className="text-brand-orange text-lg">{sessionStats.total}</span>
+                    <span className={`text-${isAdult ? 'brand-orange' : 'brand-orange'} text-lg`}>{sessionStats.total}</span>
                     <span className="text-zinc-400">/{MAX_QUESTIONS}</span>
                 </div>
             </div>
@@ -206,8 +261,8 @@ export default function Exercise({ skill, student }: ExerciseProps) {
                             }}
                             disabled={isCorrect !== null}
                             className={`p-6 rounded-2xl text-2xl font-bold transition-all transform hover:scale-105 active:scale-95 border-4 ${answer === String(option)
-                                ? 'bg-brand-purple text-white border-brand-purple/50'
-                                : 'bg-white text-zinc-900 border-zinc-300 hover:bg-brand-purple/10 hover:border-brand-purple shadow-lg'
+                                ? `bg-${themeColor} text-white border-${themeColor}/50`
+                                : `bg-white text-zinc-900 border-zinc-300 hover:bg-${themeColor}/10 hover:border-${themeColor} shadow-lg`
                                 }`}
                         >
                             {option}
@@ -221,7 +276,7 @@ export default function Exercise({ skill, student }: ExerciseProps) {
                         type={isMath ? "number" : "text"}
                         value={answer}
                         onChange={(e) => setAnswer(e.target.value)}
-                        className="w-full text-center text-4xl font-black p-4 rounded-2xl bg-zinc-100 bg-zinc-100 border-4 border-transparent focus:border-brand-purple outline-none transition-all text-zinc-900 mb-6 uppercase"
+                        className={`w-full text-center text-4xl font-black p-4 rounded-2xl bg-zinc-100 bg-zinc-100 border-4 border-transparent focus:border-${themeColor} outline-none transition-all text-zinc-900 mb-6 uppercase`}
                         placeholder="?"
                         autoFocus
                         disabled={isCorrect !== null}
@@ -231,7 +286,7 @@ export default function Exercise({ skill, student }: ExerciseProps) {
                     <button
                         type="submit"
                         disabled={!answer || isCorrect !== null}
-                        className="w-full bg-brand-orange hover:bg-brand-orange/90 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-xl py-4 rounded-2xl shadow-lg shadow-brand-orange/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3"
+                        className={`w-full ${isAdult ? 'bg-brand-orange hover:bg-brand-orange/90' : 'bg-brand-orange hover:bg-brand-orange/90'} disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-xl py-4 rounded-2xl shadow-lg shadow-brand-orange/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3`}
                     >
                         Valider
                         <ArrowRight size={24} />

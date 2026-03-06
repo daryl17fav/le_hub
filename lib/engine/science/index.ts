@@ -1,5 +1,5 @@
 import { Exercise, SkillLevel } from '../studentLevel';
-import { shuffleArray } from '../exerciseGenerator';
+import { shuffleArray } from '../utils';
 import { generateAnimalExercise } from './animals';
 import { generatePlantExercise } from './plants';
 import { generateWeatherExercise } from './weather';

@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { User, MapPin, Backpack, Smartphone, X } from 'lucide-react';
-import { AVATAR_COLORS } from '@/lib/config';
 import { supabase } from '@/lib/supabase';
+import AvatarSelector, { AVATARS } from './AvatarSelector';
 
 interface AddProfileProps {
-    onComplete: (profile: { name: string; type: 'junior' | 'adult'; village: string; avatarIndex: number }) => void;
+    onComplete: (profile: { name: string; type: 'junior' | 'adult'; village: string; avatarId: string }) => void;
     onCancel: () => void;
 }
 
@@ -16,9 +16,8 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
     const [step, setStep] = useState<Step>('type');
     const [type, setType] = useState<'junior' | 'adult'>('junior');
     const [name, setName] = useState('');
-    // selectedVillageId holds the UUID of the chosen village
     const [selectedVillageId, setSelectedVillageId] = useState('');
-    const [avatarIndex, setAvatarIndex] = useState(0);
+    const [avatarId, setAvatarId] = useState('');
     const [villageList, setVillageList] = useState<{ id: string; name: string }[]>([]);
     const [loadingVillages, setLoadingVillages] = useState(true); // start true — we fetch immediately
     const [villageError, setVillageError] = useState<string | null>(null);
@@ -72,7 +71,8 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
 
     const handleComplete = () => {
         // Pass the UUID — AuthContext sends this straight to Supabase
-        onComplete({ name, type, village: selectedVillageId, avatarIndex });
+        const finalAvatarId = avatarId || AVATARS[type][0].id; // Fallback to first if none selected
+        onComplete({ name, type, village: selectedVillageId, avatarId: finalAvatarId });
     };
 
     return (
@@ -193,7 +193,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                             <h2 className="text-3xl font-black text-brand-purple text-zinc-900 mb-2">
                                 Sélectionner le Village
                             </h2>
-                            <p className="text-zinc-600 text-zinc-600">
+                            <p className="text-zinc-600">
                                 Quel village représentent-ils ?
                             </p>
                         </div>
@@ -202,38 +202,28 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                             <label className="text-xs uppercase font-bold text-zinc-400 ml-2 block mb-2">
                                 Village
                             </label>
-                            <div className="flex items-center gap-3 bg-zinc-100 bg-zinc-100 rounded-2xl px-4 border-2 border-transparent focus-within:border-brand-purple transition-all">
-                                <MapPin size={20} className="text-brand-purple" />
-                                <select
-                                    value={village}
-                                    onChange={(e) => setVillage(e.target.value)}
-                                    className="flex-1 p-4 bg-transparent outline-none text-zinc-900 text-zinc-900 cursor-pointer"
-                                >
-                                    <option value="" className="bg-white bg-zinc-100 text-zinc-900 dark:text-zinc-100">Choisissez un village...</option>
-                                    {villages.map((v) => (
-                                        <option key={v} value={v} className="bg-white bg-zinc-100 text-zinc-900 dark:text-zinc-100">{v}</option>
 
                             {/* Error banner — only visible when Supabase fetch fails */}
                             {villageError && (
                                 <p className="text-red-500 text-sm mb-2 ml-2">{villageError}</p>
                             )}
 
-                            <div className="flex items-center gap-3 bg-zinc-900 rounded-2xl px-4 border-2 border-brand-purple focus-within:border-brand-orange transition-all">
+                            <div className="flex items-center gap-3 bg-zinc-100 rounded-2xl px-4 border-2 border-transparent focus-within:border-brand-purple transition-all">
                                 <MapPin size={20} className="text-brand-purple flex-shrink-0" />
                                 <select
                                     value={selectedVillageId}
                                     onChange={(e) => setSelectedVillageId(e.target.value)}
                                     disabled={loadingVillages}
-                                    className="flex-1 p-4 bg-transparent outline-none text-white cursor-pointer disabled:opacity-50 disabled:cursor-wait"
+                                    className="flex-1 p-4 bg-transparent outline-none text-zinc-900 cursor-pointer disabled:opacity-50 disabled:cursor-wait"
                                 >
                                     {/* Fixed placeholder — always present as the empty value */}
-                                    <option value="" disabled className="bg-zinc-900 text-zinc-400">
+                                    <option value="" disabled className="text-zinc-400">
                                         {loadingVillages ? 'Chargement des villages...' : 'Choisir votre village'}
                                     </option>
 
                                     {villageList.map((v) => (
                                         // key & value = UUID; display = human name
-                                        <option key={v.id} value={v.id} className="bg-zinc-900 text-white">
+                                        <option key={v.id} value={v.id} className="text-zinc-900">
                                             {v.name}
                                         </option>
                                     ))}
@@ -244,7 +234,7 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                         <div className="flex gap-3">
                             <button
                                 onClick={() => setStep('name')}
-                                className="flex-1 py-4 rounded-2xl font-bold text-brand-purple text-zinc-900 hover:bg-zinc-100 hover:bg-zinc-800 transition-colors"
+                                className="flex-1 py-4 rounded-2xl font-bold text-brand-purple text-zinc-900 hover:bg-zinc-100 transition-colors"
                             >
                                 Retour
                             </button>
@@ -259,28 +249,22 @@ const AddProfile: React.FC<AddProfileProps> = ({ onComplete, onCancel }) => {
                     </div>
                 )}
 
-                {/* Step 4: Avatar Selection */}
                 {step === 'avatar' && (
                     <div className="space-y-6">
                         <div className="text-center">
                             <h2 className="text-3xl font-black text-brand-purple text-zinc-900 mb-2">
-                                Choisissez une Couleur
+                                Choisissez un Avatar
                             </h2>
-                            <p className="text-zinc-600 text-zinc-600">
-                                Choisissez la couleur préférée de {name}
+                            <p className="text-zinc-600">
+                                Quel personnage {name} veut-il(elle) être ?
                             </p>
                         </div>
 
-                        <div className="grid grid-cols-5 gap-3">
-                            {AVATAR_COLORS.map((color, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setAvatarIndex(index)}
-                                    className={`aspect-square rounded-2xl ${color.bg} border-4 ${avatarIndex === index ? color.border : 'border-transparent'
-                                        } hover:scale-110 transition-transform`}
-                                />
-                            ))}
-                        </div>
+                        <AvatarSelector
+                            role={type}
+                            activeId={avatarId || AVATARS[type][0].id}
+                            onSelect={(id) => setAvatarId(id)}
+                        />
 
                         <div className="flex gap-3">
                             <button

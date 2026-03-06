@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Trophy, Star, Home, RefreshCw, ArrowRight } from 'lucide-react';
+import { Trophy, Star, Award, Home, RefreshCw, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import confetti from 'canvas-confetti';
 
 interface CompletionScreenProps {
@@ -10,9 +11,12 @@ interface CompletionScreenProps {
     total: number;
     onRestart: () => void;
     onNextLevel?: () => void;
+    isSaving?: boolean;
+    error?: string | null;
 }
 
-export default function CompletionScreen({ score, total, onRestart, onNextLevel }: CompletionScreenProps) {
+export default function CompletionScreen({ score, total, onRestart, onNextLevel, isSaving, error }: CompletionScreenProps) {
+    const { activeProfile } = useAuth();
     const router = useRouter();
     const percentage = Math.round((score / total) * 100);
 
@@ -24,6 +28,14 @@ export default function CompletionScreen({ score, total, onRestart, onNextLevel 
             origin: { y: 0.5 }
         });
     }, []);
+
+    const handleHomeClick = () => {
+        if (activeProfile?.role === 'adult') {
+            router.push('/adult');
+        } else {
+            router.push('/junior');
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-brand-purple/10 to-brand-orange/10 flex items-center justify-center p-6">
@@ -56,18 +68,24 @@ export default function CompletionScreen({ score, total, onRestart, onNextLevel 
                     </p>
                 </div>
 
-                {/* Stars based on performance */}
+                {/* Stars or Badges based on performance */}
                 <div className="flex justify-center gap-2 mb-8">
-                    {[1, 2, 3].map((star) => (
-                        <Star
-                            key={star}
-                            size={48}
-                            className={`${percentage >= star * 33
-                                ? 'text-yellow-400 fill-yellow-400'
-                                : 'text-zinc-300 dark:text-zinc-700'
-                                } transition-all`}
-                        />
-                    ))}
+                    {[1, 2, 3].map((item) => {
+                        const Icon = activeProfile?.role === 'adult' ? Award : Star;
+                        const isActive = percentage >= item * 33;
+                        const activeColor = activeProfile?.role === 'adult' ? 'text-brand-orange fill-brand-orange' : 'text-yellow-400 fill-yellow-400';
+                        
+                        return (
+                            <Icon
+                                key={item}
+                                size={48}
+                                className={`${isActive
+                                    ? activeColor
+                                    : 'text-zinc-300 dark:text-zinc-700'
+                                    } transition-all`}
+                            />
+                        );
+                    })}
                 </div>
 
                 {/* Encouragement message */}
@@ -85,19 +103,38 @@ export default function CompletionScreen({ score, total, onRestart, onNextLevel 
 
                 </p>
 
+                {/* Saving Indicator */}
+                {(isSaving || error) && (
+                    <div className={`mb-6 p-4 rounded-2xl flex items-center justify-center gap-3 font-bold ${error ? 'bg-red-50 text-red-600 border-2 border-red-200' : 'bg-blue-50 text-brand-purple border-2 border-blue-200'
+                        }`}>
+                        {isSaving ? (
+                            <>
+                                <RefreshCw className="animate-spin" size={24} />
+                                Sauvegarde de tes progrès...
+                            </>
+                        ) : (
+                            <>
+                                ⚠️ Erreur: {error}
+                            </>
+                        )}
+                    </div>
+                )}
+
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 flex-wrap justify-center">
                     <button
                         onClick={onRestart}
-                        className="flex-1 bg-zinc-200 hover:bg-zinc-300 text-zinc-700 font-bold text-lg py-4 px-6 rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[150px]"
+                        disabled={isSaving}
+                        className={`flex-1 bg-zinc-200 hover:bg-zinc-300 text-zinc-700 font-bold text-lg py-4 px-6 rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[150px] ${isSaving ? 'opacity-50 cursor-not-allowed translate-y-0 scale-100' : ''}`}
                     >
-                        <RefreshCw size={24} />
+                        <RefreshCw size={24} className={isSaving ? 'animate-spin' : ''} />
                         Recommencer
                     </button>
 
                     <button
-                        onClick={() => router.push('/junior')}
-                        className="flex-1 bg-zinc-200 hover:bg-zinc-300 text-zinc-700 font-bold text-lg py-4 px-6 rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[150px]"
+                        onClick={handleHomeClick}
+                        disabled={isSaving}
+                        className={`flex-1 bg-zinc-200 hover:bg-zinc-300 text-zinc-700 font-bold text-lg py-4 px-6 rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[150px] ${isSaving ? 'opacity-50 cursor-not-allowed translate-y-0 scale-100' : ''}`}
                     >
                         <Home size={24} />
                         Accueil
@@ -107,7 +144,8 @@ export default function CompletionScreen({ score, total, onRestart, onNextLevel 
                     {onNextLevel && percentage >= 50 && (
                         <button
                             onClick={onNextLevel}
-                            className="flex-1 bg-brand-orange hover:bg-brand-orange/90 text-white font-black text-lg py-4 px-6 rounded-2xl shadow-lg shadow-brand-orange/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[200px] animate-pulse"
+                            disabled={isSaving}
+                            className={`flex-1 bg-brand-orange hover:bg-brand-orange/90 text-white font-black text-lg py-4 px-6 rounded-2xl shadow-lg shadow-brand-orange/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 min-w-[200px] ${isSaving ? 'opacity-50 cursor-not-allowed' : 'animate-pulse'}`}
                         >
                             Niveau Suivant 🆙
                             <ArrowRight size={24} />

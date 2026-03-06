@@ -1,19 +1,11 @@
 
 import { Exercise, SkillLevel } from './studentLevel';
 import { generateScienceExercise } from './science';
+import { generateAdultExercise } from './adult';
+import { shuffleArray } from './utils';
 
-/**
- * Shuffle an array using Fisher-Yates algorithm
- * Used to randomize answer choices
- */
-export const shuffleArray = <T>(array: T[]): T[] => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-};
+// Re-export for backwards compatibility with any callers
+export { shuffleArray };
 
 /**
  * Normalize a question for better duplicate detection
@@ -529,9 +521,16 @@ const generateUniqueExercise = (
                 exercise = generateScienceExercise(level, 'mixed');
                 break;
             
-            default:
-                exercise = generateMixedMathExercise(level);
+            default: {
+                // Try adult exercises first
+                const adultExercise = generateAdultExercise(skill, level);
+                if (adultExercise) {
+                    exercise = adultExercise;
+                } else {
+                    exercise = generateMixedMathExercise(level);
+                }
                 break;
+            }
         }
         
         attempts++;
@@ -563,9 +562,13 @@ export const generateExercise = (skill: string, level: SkillLevel): Exercise => 
         case 'science_explorers':
             return generateScienceExercise(level, 'mixed');
         
-        default:
-             // Fallback to mixed math
+        default: {
+            // Try adult exercises first
+            const adultEx = generateAdultExercise(skill, level);
+            if (adultEx) return adultEx;
+            // Fallback to mixed math
             return generateMixedMathExercise(level);
+        }
     }
 };
 

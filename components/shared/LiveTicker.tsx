@@ -2,15 +2,18 @@
 
 import React, { useEffect, useState } from 'react';
 
-const LiveTicker: React.FC = () => {
-    const messages = [
-        "🎉 Le Village Alpha vient de gagner 500 points !",
+const LiveTicker: React.FC<{ leader?: { name: string, total_points: number } | null }> = ({ leader }) => {
+    const baseMessages = [
         "🏆 Nouveau Champion Hebdomadaire : Musa du Village Beta !",
         "⚡ Le Village Gamma a terminé 50 leçons aujourd'hui !",
         "🌟 Amina a obtenu le badge 'Apprenant Rapide' !",
         "🔥 Le Village Delta est sur une série de 7 jours !",
         "💎 Nouveau record : 1000 leçons terminées cette semaine !",
     ];
+
+    const messages = leader
+        ? [`🎉 ${leader.name} est en tête avec ${leader.total_points.toLocaleString()} points !`, ...baseMessages]
+        : baseMessages;
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
