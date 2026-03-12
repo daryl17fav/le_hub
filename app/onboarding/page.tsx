@@ -24,11 +24,16 @@ export default function OnboardingPage() {
         name: string;
         type: 'junior' | 'adult';
         village: string;
-        avatarIndex: number
+        avatarId: string
     }) => {
         console.log('[Onboarding] Completion triggered with:', newProfile);
         try {
-            const profileId = await addProfile(newProfile);
+            const profileId = await addProfile({
+                name: newProfile.name,
+                type: newProfile.type,
+                village: newProfile.village,
+                avatarId: newProfile.avatarId // <--- Pass the avatarId string directly
+            });
             console.log('[Onboarding] Profile created successfully:', profileId);
             
             // Success redirect
